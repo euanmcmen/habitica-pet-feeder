@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Container, Row } from "react-bootstrap";
+import PetFeedList from "./components/PetFeedList";
 
 function App() {
-  const getText = async () => {
+  const getPetFeeds = async () => {
     var requestOptions = {
       method: "POST",
     };
@@ -13,14 +14,12 @@ function App() {
 
     var data = await response.json();
 
-    console.log(data);
-
-    const stringyData = JSON.stringify(data);
-
-    setText(stringyData);
+    setBasicPetFeeds(data[0]);
+    setRemainingPetFeeds(data[1]);
   };
 
-  const [text, setText] = useState("");
+  const [basicPetFeeds, setBasicPetFeeds] = useState([]);
+  const [remainingPetFeeds, setRemainingPetFeeds] = useState([]);
 
   return (
     <>
@@ -28,11 +27,22 @@ function App() {
         <Row>
           <h1 className="text-center">Welcome to my Habitica Pet Feeder App</h1>
         </Row>
+        <br />
         <Row>
-          <button onClick={() => getText()}>Get Pet Feeds</button>
+          <button onClick={() => getPetFeeds()}>Get Pet Feeds</button>
+        </Row>
+        <br />
+        <Row>
+          <h2 className="text-center">Basic Pet Feeds</h2>
+        </Row>
+        <Row className="text-center">
+          <PetFeedList petFeeds={basicPetFeeds} />
         </Row>
         <Row>
-          <span>{text}</span>
+          <h2 className="text-center">Remaining Pet Feeds</h2>
+        </Row>
+        <Row className="text-center">
+          <PetFeedList petFeeds={remainingPetFeeds} />
         </Row>
       </Container>
     </>
