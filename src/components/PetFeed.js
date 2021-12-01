@@ -4,14 +4,12 @@ const PetFeed = (props) => {
   }
 
   return (
-    <>
-      <tr>
-        <td>{props.petFullName}</td>
-        <td>{props.foodFullName}</td>
-        <td>{props.feedQuantity}</td>
-        <td>{getSatisfiedText(props.willSatisfyPet)}</td>
-      </tr>
-    </>
+    <tr key={`${props.petFullName}+${props.foodFullName}`}>
+      <td>{props.petFullName}</td>
+      <td>{props.foodFullName}</td>
+      <td>{props.feedQuantity}</td>
+      <td>{getSatisfiedText(props.willSatisfyPet)}</td>
+    </tr>
   );
 };
 
