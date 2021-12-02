@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { Container, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import EmptyPetFeedList from "./components/EmptyPetFeedList";
 import PetFeedList from "./components/PetFeedList";
 
 function App() {
   const getPetFeeds = async () => {
     var requestOptions = {
-      method: "POST",
+      method: "GET",
     };
 
     var requestUrl = "https://localhost:44354/api/PetFeeds";
@@ -14,38 +15,52 @@ function App() {
 
     var data = await response.json();
 
-    setBasicPetFeeds(data[0]);
-    setRemainingPetFeeds(data[1]);
+    return data;
   };
 
-  const [basicPetFeeds, setBasicPetFeeds] = useState([]);
-  const [remainingPetFeeds, setRemainingPetFeeds] = useState([]);
+  const [petFeeds, setPetFeeds] = useState([]);
+  const [summary, setSummary] = useState({});
+
+  // const [basicPetFeeds, setBasicPetFeeds] = useState([]);
+  // const [remainingPetFeeds, setRemainingPetFeeds] = useState([]);
+
+  useEffect(() => {
+    getPetFeeds()
+      .then((data) => {
+        console.log(data);
+
+        setPetFeeds(data.petFoodFeeds);
+        setSummary(data.petFoodFeedSummary);
+      })
+      .catch((error) => {
+        console.log("whoopsie: ", error);
+      });
+  }, []);
 
   return (
-    <>
-      <Container>
-        <Row>
+    <Container>
+      <Row>
+        <Col>
           <h1 className="text-center">Welcome to my Habitica Pet Feeder App</h1>
-        </Row>
-        <br />
-        <Row>
-          <button onClick={() => getPetFeeds()}>Get Pet Feeds</button>
-        </Row>
-        <br />
-        <Row>
-          <h2 className="text-center">Basic Pet Feeds</h2>
-        </Row>
-        <Row className="text-center">
-          <PetFeedList petFeeds={basicPetFeeds} />
-        </Row>
-        <Row>
-          <h2 className="text-center">Remaining Pet Feeds</h2>
-        </Row>
-        <Row className="text-center">
-          <PetFeedList petFeeds={remainingPetFeeds} />
-        </Row>
-      </Container>
-    </>
+        </Col>
+      </Row>
+      <br />
+      <Row>
+        <Col>
+          <h2 className="text-center">Pet Feeds</h2>
+        </Col>
+      </Row>
+      <br />
+      <Row className="text-center">
+        <Col>
+          {petFeeds !== undefined && petFeeds.length > 0 ? (
+            <PetFeedList petFeeds={petFeeds} />
+          ) : (
+            <EmptyPetFeedList />
+          )}
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
