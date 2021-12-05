@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import EmptyPetFeedList from "./components/EmptyPetFeedList";
 import PetFeedList from "./components/PetFeedList";
+import PetFeedSummary from "./components/PetFeedSummary";
 
 function App() {
   const getPetFeeds = async () => {
@@ -19,7 +20,7 @@ function App() {
   };
 
   const [petFeeds, setPetFeeds] = useState([]);
-  const [summary, setSummary] = useState({});
+  const [summary, setSummary] = useState(null);
 
   // const [basicPetFeeds, setBasicPetFeeds] = useState([]);
   // const [remainingPetFeeds, setRemainingPetFeeds] = useState([]);
@@ -49,6 +50,10 @@ function App() {
         <Col>
           <h2 className="text-center">Pet Feeds</h2>
         </Col>
+      </Row>
+      <br />
+      <Row>
+        <Col>{summary !== null && <PetFeedSummary summary={summary} />}</Col>
       </Row>
       <br />
       <Row className="text-center">
