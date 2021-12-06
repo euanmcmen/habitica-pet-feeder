@@ -1,70 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import EmptyPetFeedList from "./components/EmptyPetFeedList";
-import PetFeedList from "./components/PetFeedList";
-import PetFeedSummary from "./components/PetFeedSummary";
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import { Container } from "react-bootstrap";
+import LoginPage from "./pages/loginPage";
+import PetFeedsPage from "./pages/petFeedsPage";
+import HomePage from "./pages/homePage";
+import ROUTE_CONSTANTS from "./routeConstants";
 
 function App() {
-  const getPetFeeds = async () => {
-    var requestOptions = {
-      method: "GET",
-    };
-
-    var requestUrl = "https://localhost:44354/api/PetFeeds";
-
-    var response = await fetch(requestUrl, requestOptions);
-
-    var data = await response.json();
-
-    return data;
-  };
-
-  const [petFeeds, setPetFeeds] = useState([]);
-  const [summary, setSummary] = useState(null);
-
-  // const [basicPetFeeds, setBasicPetFeeds] = useState([]);
-  // const [remainingPetFeeds, setRemainingPetFeeds] = useState([]);
-
-  useEffect(() => {
-    getPetFeeds()
-      .then((data) => {
-        console.log(data);
-
-        setPetFeeds(data.petFoodFeeds);
-        setSummary(data.petFoodFeedSummary);
-      })
-      .catch((error) => {
-        console.log("whoopsie: ", error);
-      });
-  }, []);
-
   return (
     <Container>
-      <Row>
-        <Col>
-          <h1 className="text-center">Welcome to my Habitica Pet Feeder App</h1>
-        </Col>
-      </Row>
-      <br />
-      <Row>
-        <Col>
-          <h2 className="text-center">Pet Feeds</h2>
-        </Col>
-      </Row>
-      <br />
-      <Row>
-        <Col>{summary !== null && <PetFeedSummary summary={summary} />}</Col>
-      </Row>
-      <br />
-      <Row className="text-center">
-        <Col>
-          {petFeeds !== undefined && petFeeds.length > 0 ? (
-            <PetFeedList petFeeds={petFeeds} />
-          ) : (
-            <EmptyPetFeedList />
-          )}
-        </Col>
-      </Row>
+      <Routes>
+        <Route path={ROUTE_CONSTANTS.LOGIN_PAGE} element={<LoginPage />} />
+        <Route
+          path={ROUTE_CONSTANTS.FEED_PETS_PAGE}
+          element={<PetFeedsPage />}
+        />
+        <Route path={ROUTE_CONSTANTS.HOME_PAGE} element={<HomePage />} />
+      </Routes>
     </Container>
   );
 }
