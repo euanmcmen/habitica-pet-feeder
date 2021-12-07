@@ -1,4 +1,4 @@
-import PetFeed from "./PetFeed";
+import PetFeed from "../PetFeed";
 import { Collapse, Button } from "react-bootstrap";
 import { useState } from "react";
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import EmptyPetFeedList from "../components/EmptyPetFeedList";
-import PetFeedList from "../components/PetFeedList";
+import EmptyPetFeedList from "../components/PetFeedLists/EmptyPetFeedList";
+import ErrorPetFeedList from "../components/PetFeedLists/ErrorPetFeedsList";
+import PetFeedList from "../components/PetFeedLists/PetFeedList";
 import PetFeedSummary from "../components/PetFeedSummary";
 
 const PetFeedsPage = () => {
@@ -20,7 +21,13 @@ const PetFeedsPage = () => {
   };
 
   const [petFeeds, setPetFeeds] = useState([]);
+  const [hasPetFeedsFetchError, setpetFeedsFetchError] = useState(false);
+
   const [summary, setSummary] = useState(null);
+
+  const hasPetFeeds = () => petFeeds !== undefined && petFeeds.length > 0;
+
+  const hasPetFeedSummary = () => summary !== undefined && summary !== null;
 
   useEffect(() => {
     getPetFeeds()
@@ -32,8 +39,21 @@ const PetFeedsPage = () => {
       })
       .catch((error) => {
         console.log("whoopsie: ", error);
+        setpetFeedsFetchError(true);
       });
   }, []);
+
+  const showPetFeeds = () => {
+    if (!hasPetFeedsFetchError) {
+      return hasPetFeeds() ? (
+        <PetFeedList petFeeds={petFeeds} />
+      ) : (
+        <EmptyPetFeedList />
+      );
+    } else {
+      return <ErrorPetFeedList />;
+    }
+  };
 
   return (
     <Container>
@@ -44,21 +64,11 @@ const PetFeedsPage = () => {
       </Row>
       <br />
       <Row>
-        <Col>
-          {summary !== undefined && summary !== null && (
-            <PetFeedSummary summary={summary} />
-          )}
-        </Col>
+        <Col>{hasPetFeedSummary() && <PetFeedSummary summary={summary} />}</Col>
       </Row>
       <br />
       <Row className="text-center">
-        <Col>
-          {petFeeds !== undefined && petFeeds.length > 0 ? (
-            <PetFeedList petFeeds={petFeeds} />
-          ) : (
-            <EmptyPetFeedList />
-          )}
-        </Col>
+        <Col>{showPetFeeds()}</Col>
       </Row>
     </Container>
   );
