@@ -1,5 +1,5 @@
-import PetFeed from "../PetFeed";
-import { Collapse, Button } from "react-bootstrap";
+import PetFeed from "../PetFeeds/PetFeedRow";
+import { Collapse, Button, ListGroup } from "react-bootstrap";
 import { useState } from "react";
 
 const PetFeedList = (props) => {
@@ -16,6 +16,12 @@ const PetFeedList = (props) => {
       </Button>
 
       <Collapse in={expanded}>
+        <ListGroup variant="flush">
+          {props.petFeeds.map((petFeed) => PetFeed(petFeed))}
+        </ListGroup>
+      </Collapse>
+
+      {/* <Collapse in={expanded}>
         <table className="table">
           <thead>
             <tr></tr>
@@ -25,7 +31,7 @@ const PetFeedList = (props) => {
           </thead>
           <tbody>{props.petFeeds.map((petFeed) => PetFeed(petFeed))}</tbody>
         </table>
-      </Collapse>
+      </Collapse> */}
     </div>
   );
 };
