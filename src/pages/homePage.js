@@ -1,8 +1,5 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import ROUTE_CONSTANTS from "../routeConstants";
-
 const HomePage = () => {
   return (
     <>
@@ -12,11 +9,6 @@ const HomePage = () => {
         </Col>
       </Row>
       <br />
-      <Row>
-        <Col>
-          <Link to={ROUTE_CONSTANTS.LOGIN_PAGE}>Log In</Link>
-        </Col>
-      </Row>
     </>
   );
 };

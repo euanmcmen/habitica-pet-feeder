@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import EmptyPetFeedList from "../components/PetFeedLists/EmptyPetFeedList";
-import ErrorPetFeedList from "../components/PetFeedLists/ErrorPetFeedsList";
-import PetFeedList from "../components/PetFeedLists/PetFeedList";
-import PetFeedSummary from "../components/PetFeedSummary";
+import { Row, Col } from "react-bootstrap";
+import PetFeedList from "../components/PetFeeds/PetFeedList";
+import PetFeedSummary from "../components/PetFeeds/PetFeedSummary";
 
-const PetFeedsPage = () => {
+const PetFeedsPage = (props) => {
   const getPetFeeds = async () => {
     var requestOptions = {
       method: "GET",
@@ -22,46 +20,44 @@ const PetFeedsPage = () => {
 
   const [petFeeds, setPetFeeds] = useState([]);
   const [hasPetFeedsFetchError, setpetFeedsFetchError] = useState(false);
+  const [isFetchInProgress, setFetchInProgress] = useState(false);
 
   const [summary, setSummary] = useState(null);
-
-  const hasPetFeeds = () => petFeeds !== undefined && petFeeds.length > 0;
 
   const hasPetFeedSummary = () => summary !== undefined && summary !== null;
 
   useEffect(() => {
+    setFetchInProgress(true);
+
     getPetFeeds()
       .then((data) => {
-        console.log(data);
-
         setPetFeeds(data.petFoodFeeds);
         setSummary(data.petFoodFeedSummary);
       })
       .catch((error) => {
         console.log("whoopsie: ", error);
         setpetFeedsFetchError(true);
+      })
+      .finally((response) => {
+        setFetchInProgress(false);
       });
   }, []);
 
   const showPetFeeds = () => {
-    if (!hasPetFeedsFetchError) {
-      return hasPetFeeds() ? (
-        <PetFeedList petFeeds={petFeeds} />
-      ) : (
-        <EmptyPetFeedList />
-      );
-    } else {
-      return <ErrorPetFeedList />;
-    }
+    //Show a loading page if the API is still working away.
+    if (isFetchInProgress) return <p>Loading...</p>;
+
+    //When the API finishes, it will either return:
+
+    //...An error
+    if (hasPetFeedsFetchError) return <p>Oh no...</p>;
+
+    //...Or pet feeds including an empty set.
+    return <PetFeedList petFeeds={petFeeds} />;
   };
 
   return (
-    <Container>
-      <Row>
-        <Col>
-          <h1 className="text-center">Habitica Pet Feeder - Pet Feeds</h1>
-        </Col>
-      </Row>
+    <>
       <br />
       <Row>
         <Col>{hasPetFeedSummary() && <PetFeedSummary summary={summary} />}</Col>
@@ -70,7 +66,7 @@ const PetFeedsPage = () => {
       <Row className="text-center">
         <Col>{showPetFeeds()}</Col>
       </Row>
-    </Container>
+    </>
   );
 };
 
