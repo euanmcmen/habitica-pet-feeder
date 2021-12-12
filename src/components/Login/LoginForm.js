@@ -2,11 +2,26 @@ import React from "react";
 import { Form, Button } from "react-bootstrap";
 
 const LoginForm = (props) => {
-  const onSubmit = (event) => {};
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    var inputs = getFormInputs(event);
+
+    props.onLoginSubmit(inputs.userId, inputs.apiKey);
+  };
+
+  const getFormInputs = (event) => {
+    const eventTargetArray = [...event.target];
+
+    return {
+      userId: eventTargetArray.find((x) => x.id === "formUserId").value,
+      apiKey: eventTargetArray.find((x) => x.id === "formApiKey").value,
+    };
+  };
 
   return (
     <>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formUserId">
           <Form.Label>User Id</Form.Label>
           <Form.Control type="text" placeholder="Enter Used Id..." />
@@ -21,7 +36,7 @@ const LoginForm = (props) => {
           </Form.Text>
         </Form.Group>
 
-        <Button variant="primary" type="submit" onSubmit={onSubmit}>
+        <Button variant="primary" type="submit">
           Feed Pets
         </Button>
       </Form>

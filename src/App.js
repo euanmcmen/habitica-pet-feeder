@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
-import LoginPage from "./pages/loginPage";
-import PetFeedsPage from "./pages/petFeedsPage";
-import HomePage from "./pages/homePage";
-import ROUTE_CONSTANTS from "./routeConstants";
 import PetFeedList from "./components/PetFeeds/PetFeedList";
 import PetFeedSummary from "./components/PetFeeds/PetFeedSummary";
-import LoginForm from "./components/Login/loginForm";
+import LoginForm from "./components/Login/LoginForm";
 
 function App() {
   const getPetFeedsAsync = async (authCredentials) => {
@@ -34,9 +29,7 @@ function App() {
 
   const [summary, setSummary] = useState(null);
 
-  const hasPetFeedSummary = () => summary !== undefined && summary !== null;
-
-  useEffect(() => {
+  const handlePetFeedFetch = () => {
     setFetchInProgress(true);
 
     getPetFeedsAsync()
@@ -51,19 +44,39 @@ function App() {
       .finally((response) => {
         setFetchInProgress(false);
       });
-  }, []);
+  };
+
+  // useEffect(() => {}, []);
 
   const showPetFeeds = () => {
     //Show a loading page if the API is still working away.
-    if (isFetchInProgress) return <p>Loading...</p>;
+    if (isFetchInProgress) return <p>Loading Pet Feeds...</p>;
 
     //When the API finishes, it will either return:
 
     //...An error
-    if (hasPetFeedsFetchError) return <p>Oh no...</p>;
+    if (hasPetFeedsFetchError) return <p>Unable to fetch Pet Feeds</p>;
 
     //...Or pet feeds including an empty set.
     return <PetFeedList petFeeds={petFeeds} />;
+  };
+
+  const showPetFeedSummary = () => {
+    //Show a loading page if the API is still working away.
+    if (isFetchInProgress) return <p>Loading Pet Feed Summary...</p>;
+
+    //When the API finishes, it will either return:
+
+    //...An error
+    if (hasPetFeedsFetchError) return <p>Unable to fetch Pet Feed Summary</p>;
+
+    //...Or pet feed summary.
+    return <PetFeedSummary summary={summary} />;
+  };
+
+  const handleLoginSubmit = (userId, apiKey) => {
+    console.log("UserId: ", userId);
+    console.log("API key: ", apiKey);
   };
 
   return (
@@ -76,16 +89,16 @@ function App() {
       <br />
       <Row>
         <Col>
-          <LoginForm
+          <LoginForm onLoginSubmit={handleLoginSubmit} />
         </Col>
       </Row>
-      <Row>
-        <Col>{hasPetFeedSummary() && <PetFeedSummary summary={summary} />}</Col>
+      {/* <Row>
+        <Col>{showPetFeedSummary()}</Col>
       </Row>
       <br />
       <Row className="text-center">
         <Col>{showPetFeeds()}</Col>
-      </Row>
+      </Row> */}
     </Container>
   );
 }
