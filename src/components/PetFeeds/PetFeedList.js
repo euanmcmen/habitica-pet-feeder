@@ -5,7 +5,7 @@ import { useState } from "react";
 const PetFeedList = (props) => {
   const [expanded, setExpanded] = useState(true);
 
-  const showPetFeeds = () => {
+  const showPetFeeds = () => (
     <div>
       <Button
         variant="success"
@@ -20,15 +20,15 @@ const PetFeedList = (props) => {
           {props.petFeeds.map((petFeed) => PetFeed(petFeed))}
         </ListGroup>
       </Collapse>
-    </div>;
-  };
+    </div>
+  );
 
-  const showEmptyPetFeeds = () => {
+  const showEmptyPetFeeds = () => (
     <div>
       <p>No pet feed data.</p>
       <p>You may not have any pets which can be fed, or food for your pets.</p>
-    </div>;
-  };
+    </div>
+  );
 
   return props.petFeeds.length > 0 ? showPetFeeds() : showEmptyPetFeeds();
 };
