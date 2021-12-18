@@ -5,17 +5,46 @@ import PetFeedSummary from "./components/PetFeeds/PetFeedSummary";
 import LoginForm from "./components/Login/LoginForm";
 
 function App() {
-  const getPetFeedsAsync = async (userAuthInfo) => {
-    var stringyUserAuthInfo = JSON.stringify(userAuthInfo);
+  const [petFeeds, setPetFeeds] = useState([]);
+  const [hasPetFeedsFetchError, setpetFeedsFetchError] = useState(false);
 
-    console.log(stringyUserAuthInfo);
+  const [summary, setSummary] = useState(null);
 
+  const [authenticatedUser, setAuthenticatedUser] = useState(null);
+
+  const [isAuthenticating, setAuthenticating] = useState(false);
+
+  const handleLoginSubmit = (userId, apiKey) => {
+    setAuthenticating(true);
+
+    const authUser = {
+      apiUserId: userId,
+      apiUserKey: apiKey,
+    };
+
+    getPetFeedsAsync(authUser)
+      .then((data) => {
+        console.log(data);
+        setPetFeeds(data.petFoodFeeds);
+        setSummary(data.petFoodFeedSummary);
+        setAuthenticatedUser(authUser);
+      })
+      .catch((error) => {
+        console.log("whoopsie: ", error);
+        setpetFeedsFetchError(true);
+      })
+      .finally((response) => {
+        setAuthenticating(false);
+      });
+  };
+
+  const getPetFeedsAsync = async (authUser) => {
     var requestUrl = "https://localhost:44354/api/PetFeeds";
 
     var requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: stringyUserAuthInfo,
+      body: JSON.stringify(authUser),
     };
 
     var response = await fetch(requestUrl, requestOptions);
@@ -25,38 +54,11 @@ function App() {
     return data;
   };
 
-  const [petFeeds, setPetFeeds] = useState([]);
-  const [hasPetFeedsFetchError, setpetFeedsFetchError] = useState(false);
-  const [isAuthenticated, setAuthenticated] = useState(false);
-  const [isFetchInProgress, setFetchInProgress] = useState(false);
-
-  const [summary, setSummary] = useState(null);
-
-  const handlePetFeedFetch = (userAuthInfo) => {
-    setFetchInProgress(true);
-
-    getPetFeedsAsync(userAuthInfo)
-      .then((data) => {
-        console.log(data);
-        setPetFeeds(data.petFoodFeeds);
-        setSummary(data.petFoodFeedSummary);
-      })
-      .catch((error) => {
-        console.log("whoopsie: ", error);
-        setpetFeedsFetchError(true);
-      })
-      .finally((response) => {
-        setFetchInProgress(false);
-      });
-  };
-
-  // useEffect(() => {}, []);
-
   const showPetFeeds = () => {
-    if (!isAuthenticated) return <p>...</p>;
+    if (authenticatedUser === null) return <p>...</p>;
 
     //Show a loading page if the API is still working away.
-    if (isFetchInProgress) return <p>Loading Pet Feeds...</p>;
+    if (isAuthenticating) return <p>Loading Pet Feeds...</p>;
 
     //When the API finishes, it will either return:
 
@@ -68,10 +70,10 @@ function App() {
   };
 
   const showPetFeedSummary = () => {
-    if (!isAuthenticated) return <p>...</p>;
+    if (authenticatedUser === null) return <p>...</p>;
 
     //Show a loading page if the API is still working away.
-    if (isFetchInProgress) return <p>Loading Pet Feed Summary...</p>;
+    if (isAuthenticating) return <p>Loading Pet Feed Summary...</p>;
 
     //When the API finishes, it will either return:
 
@@ -80,20 +82,6 @@ function App() {
 
     //...Or pet feed summary.
     return <PetFeedSummary summary={summary} />;
-  };
-
-  const handleLoginSubmit = (userId, apiKey) => {
-    console.log("UserId: ", userId);
-    console.log("API key: ", apiKey);
-
-    const auth = {
-      apiUserId: userId,
-      apiKey: apiKey,
-    };
-
-    setAuthenticated(true);
-
-    handlePetFeedFetch(auth);
   };
 
   return (

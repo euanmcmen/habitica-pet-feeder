@@ -1,8 +1,11 @@
-import { Col, Row, ListGroup, Badge, Figure, Image } from "react-bootstrap";
+import { Col, Row, ListGroup, Image } from "react-bootstrap";
 
 const PetFeed = (props) => {
   return (
-    <ListGroup.Item key={`${props.petFullName}+${props.foodFullName}`}>
+    <ListGroup.Item
+      key={`${props.petFullName}+${props.foodFullName}`}
+      variant="primary"
+    >
       <Row className="justify-content-md-center">
         <Col md="auto">
           <Image
