@@ -1,6 +1,6 @@
 import { Col, Row, ListGroup, Image } from "react-bootstrap";
 
-const PetFeed = (props) => {
+const PetFeedRowListItem = (props) => {
   return (
     <ListGroup.Item
       key={`${props.petFullName}+${props.foodFullName}`}
@@ -35,4 +35,4 @@ const PetFeed = (props) => {
   );
 };
 
-export default PetFeed;
+export default PetFeedRowListItem;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import PetFeedList from "./components/PetFeeds/PetFeedList";
+import PetFeedList from "./components/PetFeeds/PetFeedList/PetFeedList";
 import PetFeedSummary from "./components/PetFeeds/PetFeedSummary";
 import LoginForm from "./components/Login/LoginForm";
 

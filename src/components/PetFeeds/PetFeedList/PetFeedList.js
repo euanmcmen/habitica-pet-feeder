@@ -1,6 +1,7 @@
-import PetFeed from "./PetFeedRow";
 import { Collapse, Button, ListGroup } from "react-bootstrap";
 import { useState } from "react";
+import PetFeedRowListItem from "../PetFeedRow/PetFeedRowListItem";
+import PetFeedRowCard from "../PetFeedRow/PetFeedRowCard";
 
 const PetFeedList = (props) => {
   const [expanded, setExpanded] = useState(true);
@@ -15,12 +16,24 @@ const PetFeedList = (props) => {
         {expanded ? "Hide" : "Show"} Pet Feeds
       </Button>
 
-      <Collapse in={expanded}>
+      {/* <Collapse in={expanded}>
         <ListGroup variant="flush">
-          {props.petFeeds.map((petFeed) => PetFeed(petFeed))}
+          {props.petFeeds.map((petFeed) => PetFeedRowListItem(petFeed))}
         </ListGroup>
-      </Collapse>
+      </Collapse> */}
+
+      <Collapse in={expanded}>{showPetFeedsInListItem()}</Collapse>
     </div>
+  );
+
+  const showPetFeedsInListItem = () => (
+    <ListGroup variant="flush">
+      {props.petFeeds.map((petFeed) => PetFeedRowListItem(petFeed))}
+    </ListGroup>
+  );
+
+  const showPetFeedsInCards = () => (
+    <>{props.petFeeds.map((petFeed) => PetFeedRowCard(petFeed))}</>
   );
 
   const showEmptyPetFeeds = () => (
