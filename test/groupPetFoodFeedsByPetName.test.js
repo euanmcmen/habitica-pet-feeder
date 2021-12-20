@@ -5,7 +5,7 @@ const testInput = [
     petFullName: "LionCub-White",
     foodFullName: "Milk",
     feedQuantity: 6,
-    willSatisfyPet: true,
+    willSatisfyPet: false,
   },
   {
     petFullName: "TigerCub-Base",
@@ -90,13 +90,13 @@ const expectedTigerCub = {
 
 const expectedLionCub = {
   petFullName: "LionCub-White",
-  willSatisfyPet: true,
+  willSatisfyPet: false,
   petFoodFeeds: [
     {
       petFullName: "LionCub-White",
       foodFullName: "Milk",
       feedQuantity: 6,
-      willSatisfyPet: true,
+      willSatisfyPet: false,
     },
   ],
 };
