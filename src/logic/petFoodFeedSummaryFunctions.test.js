@@ -2,7 +2,7 @@ const {
   getNumberOfPetsFed,
   getNumberOfPetsFedFully,
   getNumberOfFoodsFed,
-} = require("../src/logic/petFoodFeedSummaryFunctions");
+} = require("./petFoodFeedSummaryFunctions");
 
 const testInput = [
   {

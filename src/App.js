@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import PetFeedList from "./components/PetFeeds/PetFeedList/PetFeedList";
-import PetFeedSummary from "./components/PetFeeds/PetFeedSummary";
+import PetFoodFeedList from "./components/PetFoodFeeds/PetFoodFeedList/PetFoodFeedList";
+import PetFoodFeedSummary from "./components/PetFoodFeeds/PetFoodFeedSummary";
 import LoginForm from "./components/Login/LoginForm";
 
 function App() {
-  const [petFeeds, setPetFeeds] = useState([]);
-  const [hasPetFeedsFetchError, setpetFeedsFetchError] = useState(false);
-
-  const [summary, setSummary] = useState(null);
+  const [petFoodFeeds, setPetFoodFeeds] = useState([]);
+  const [hasPetFoodFeedsFetchError, setPetFoodFeedsFetchError] =
+    useState(false);
 
   const [authenticatedUser, setAuthenticatedUser] = useState(null);
 
@@ -22,24 +21,23 @@ function App() {
       apiUserKey: apiKey,
     };
 
-    getPetFeedsAsync(authUser)
+    getPetFoodFeedsAsync(authUser)
       .then((data) => {
         console.log(data);
-        setPetFeeds(data.petFoodFeeds);
-        setSummary(data.petFoodFeedSummary);
+        setPetFoodFeeds(data);
         setAuthenticatedUser(authUser);
       })
       .catch((error) => {
         console.log("whoopsie: ", error);
-        setpetFeedsFetchError(true);
+        setPetFoodFeedsFetchError(true);
       })
       .finally((response) => {
         setAuthenticating(false);
       });
   };
 
-  const getPetFeedsAsync = async (authUser) => {
-    var requestUrl = "https://localhost:44354/api/PetFeeds";
+  const getPetFoodFeedsAsync = async (authUser) => {
+    var requestUrl = "https://localhost:44354/api/PetFoodFeeds";
 
     var requestOptions = {
       method: "POST",
@@ -54,34 +52,35 @@ function App() {
     return data;
   };
 
-  const showPetFeeds = () => {
+  const showPetFoodFeeds = () => {
     if (authenticatedUser === null) return <p>...</p>;
 
     //Show a loading page if the API is still working away.
-    if (isAuthenticating) return <p>Loading Pet Feeds...</p>;
+    if (isAuthenticating)
+      return <p>Calculating Pet Food Feeds for your pets...</p>;
 
     //When the API finishes, it will either return:
 
     //...An error
-    if (hasPetFeedsFetchError) return <p>Unable to fetch Pet Feeds</p>;
+    if (hasPetFoodFeedsFetchError) return <p>An error occurred.</p>;
 
     //...Or pet feeds including an empty set.
-    return <PetFeedList petFeeds={petFeeds} />;
+    return <PetFoodFeedList petFoodFeeds={petFoodFeeds} />;
   };
 
-  const showPetFeedSummary = () => {
+  const showPetFoodFeedSummary = () => {
     if (authenticatedUser === null) return <p>...</p>;
 
     //Show a loading page if the API is still working away.
-    if (isAuthenticating) return <p>Loading Pet Feed Summary...</p>;
+    if (isAuthenticating) return <p>Calculating Pet Food Feed summary...</p>;
 
     //When the API finishes, it will either return:
 
     //...An error
-    if (hasPetFeedsFetchError) return <p>Unable to fetch Pet Feed Summary</p>;
+    if (hasPetFoodFeedsFetchError) return <p>An error occurred</p>;
 
     //...Or pet feed summary.
-    return <PetFeedSummary summary={summary} />;
+    return <PetFoodFeedSummary petFoodFeeds={petFoodFeeds} />;
   };
 
   return (
@@ -98,11 +97,11 @@ function App() {
         </Col>
       </Row>
       <Row>
-        <Col>{showPetFeedSummary()}</Col>
+        <Col>{showPetFoodFeedSummary()}</Col>
       </Row>
       <br />
       <Row className="text-center">
-        <Col>{showPetFeeds()}</Col>
+        <Col>{showPetFoodFeeds()}</Col>
       </Row>
     </Container>
   );

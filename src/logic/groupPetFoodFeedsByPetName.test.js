@@ -1,4 +1,4 @@
-const groupPetFoodFeedsByPetName = require("../src/logic/groupPetFoodFeedsByPetName");
+const groupPetFoodFeedsByPetName = require("./groupPetFoodFeedsByPetName");
 
 const testInput = [
   {

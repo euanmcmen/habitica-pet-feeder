@@ -1,12 +1,12 @@
 import { Collapse, Button, ListGroup } from "react-bootstrap";
 import { useState } from "react";
-import PetFeedRowListItem from "../PetFeedRow/PetFeedRowListItem";
-import PetFeedRowCard from "../PetFeedRow/PetFeedRowCard";
+import PetFoodFeedRowListItem from "../PetFoodFeedRow/PetFoodFeedRowListItem";
+import PetFoodFeedRowCard from "../PetFoodFeedRow/PetFoodFeedRowCard";
 
-const PetFeedList = (props) => {
+const PetFoodFeedList = (props) => {
   const [expanded, setExpanded] = useState(true);
 
-  const showPetFeeds = () => (
+  const showPetFoodFeeds = () => (
     <div>
       <Button
         variant="success"
@@ -22,28 +22,34 @@ const PetFeedList = (props) => {
         </ListGroup>
       </Collapse> */}
 
-      <Collapse in={expanded}>{showPetFeedsInListItem()}</Collapse>
+      <Collapse in={expanded}>{showPetFoodFeedsInListItem()}</Collapse>
     </div>
   );
 
-  const showPetFeedsInListItem = () => (
+  const showPetFoodFeedsInListItem = () => (
     <ListGroup variant="flush">
-      {props.petFeeds.map((petFeed) => PetFeedRowListItem(petFeed))}
+      {props.petFoodFeeds.map((petFoodFeed) =>
+        PetFoodFeedRowListItem(petFoodFeed)
+      )}
     </ListGroup>
   );
 
-  const showPetFeedsInCards = () => (
-    <>{props.petFeeds.map((petFeed) => PetFeedRowCard(petFeed))}</>
+  const showPetFoodFeedsInCards = () => (
+    <>
+      {props.petFoodFeeds.map((petFoodFeed) => PetFoodFeedRowCard(petFoodFeed))}
+    </>
   );
 
-  const showEmptyPetFeeds = () => (
+  const showEmptyPetFoodFeeds = () => (
     <div>
       <p>No pet feed data.</p>
       <p>You may not have any pets which can be fed, or food for your pets.</p>
     </div>
   );
 
-  return props.petFeeds.length > 0 ? showPetFeeds() : showEmptyPetFeeds();
+  return props.petFoodFeeds.length > 0
+    ? showPetFoodFeeds()
+    : showEmptyPetFoodFeeds();
 };
 
-export default PetFeedList;
+export default PetFoodFeedList;

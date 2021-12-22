@@ -16,7 +16,7 @@
  * @description
  * Returns a collection of Grouped PetFoodFeeds, grouped by the Pet's full name.
  *
- * @param petFeeds A list of PetFoodFeeds as returned by the API.
+ * @param petFoodFeeds A list of PetFoodFeeds as returned by the API.
  *
  * @returns Collection of Grouped PetFoodFeeds by their full name.
  */

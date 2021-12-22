@@ -1,6 +1,6 @@
 import { Col, Row, Image, Card } from "react-bootstrap";
 
-const PetFeedRowCard = (props) => {
+const PetFoodFeedRowCard = (props) => {
   return (
     <Card key={`${props.petFullName}+${props.foodFullName}`}>
       <Card.Body>
@@ -34,4 +34,4 @@ const PetFeedRowCard = (props) => {
   );
 };
 
-export default PetFeedRowCard;
+export default PetFoodFeedRowCard;
