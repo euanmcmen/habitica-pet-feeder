@@ -37,7 +37,8 @@ function App() {
   };
 
   const getPetFoodFeedsAsync = async (authUser) => {
-    var requestUrl = "https://localhost:44354/api/PetFoodFeeds";
+    var requestUrl =
+      "https://habitica-pet-feeder-api.azurewebsites.net/api/PetFoodFeeds";
 
     var requestOptions = {
       method: "POST",
