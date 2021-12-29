@@ -3,18 +3,24 @@ import { Container, Row, Col } from "react-bootstrap";
 import PetFoodFeedList from "./components/PetFoodFeeds/PetFoodFeedList/PetFoodFeedList";
 import PetFoodFeedSummary from "./components/PetFoodFeeds/PetFoodFeedSummary";
 import LoginForm from "./components/Login/LoginForm";
+import MainDisplay from "./components/Main/MainDisplay"
 
 function App() {
   const [petFoodFeeds, setPetFoodFeeds] = useState([]);
-  const [hasPetFoodFeedsFetchError, setPetFoodFeedsFetchError] =
-    useState(false);
+  
+  // const [hasPetFoodFeedsFetchError, setPetFoodFeedsFetchError] = useState(false);
 
-  const [authenticatedUser, setAuthenticatedUser] = useState(null);
+  // const [authenticatedUser, setAuthenticatedUser] = useState(null);
 
-  const [isAuthenticating, setAuthenticating] = useState(false);
+  const [fetchState, setFetchState] = useState(0);
+
+  // -1 - Error
+  // 0 - Fetch not started
+  // 1 - Fetch started
+  // 2 - Fetch complete
 
   const handleLoginSubmit = (userId, apiKey) => {
-    setAuthenticating(true);
+    setFetchState(1);
 
     const authUser = {
       apiUserId: userId,
@@ -23,17 +29,14 @@ function App() {
 
     getPetFoodFeedsAsync(authUser)
       .then((data) => {
-        console.log(data);
         setPetFoodFeeds(data);
-        setAuthenticatedUser(authUser);
+        // setAuthenticatedUser(authUser);
+        setFetchState(2)
       })
       .catch((error) => {
         console.log("whoopsie: ", error);
-        setPetFoodFeedsFetchError(true);
+        setFetchState(-1)
       })
-      .finally((response) => {
-        setAuthenticating(false);
-      });
   };
 
   const getPetFoodFeedsAsync = async (authUser) => {
@@ -48,41 +51,20 @@ function App() {
 
     var response = await fetch(requestUrl, requestOptions);
 
-    var data = await response.json();
+    var responseData = await response.json();
 
-    return data;
+    return responseData;
   };
 
-  const showPetFoodFeeds = () => {
-    if (authenticatedUser === null) return <p>...</p>;
+  const showMainDisplay = () => {
+    if (fetchState === 0) return <p>...</p>;
 
-    //Show a loading page if the API is still working away.
-    if (isAuthenticating)
-      return <p>Calculating Pet Food Feeds for your pets...</p>;
+    return <MainDisplay fetchState={fetchState} petFoodFeeds={petFoodFeeds} />
+  }
 
-    //When the API finishes, it will either return:
-
-    //...An error
-    if (hasPetFoodFeedsFetchError) return <p>An error occurred.</p>;
-
-    //...Or pet feeds including an empty set.
-    return <PetFoodFeedList petFoodFeeds={petFoodFeeds} />;
-  };
-
-  const showPetFoodFeedSummary = () => {
-    if (authenticatedUser === null) return <p>...</p>;
-
-    //Show a loading page if the API is still working away.
-    if (isAuthenticating) return <p>Calculating Pet Food Feed summary...</p>;
-
-    //When the API finishes, it will either return:
-
-    //...An error
-    if (hasPetFoodFeedsFetchError) return <p>An error occurred</p>;
-
-    //...Or pet feed summary.
-    return <PetFoodFeedSummary petFoodFeeds={petFoodFeeds} />;
-  };
+  //Use a Bootstrap Accordian to get a nice containerised look?
+  // https://react-bootstrap.github.io/components/accordion/
+  
 
   return (
     <Container>
@@ -97,13 +79,10 @@ function App() {
           <LoginForm onLoginSubmit={handleLoginSubmit} />
         </Col>
       </Row>
-      <Row>
-        <Col>{showPetFoodFeedSummary()}</Col>
-      </Row>
-      <br />
-      <Row className="text-center">
-        <Col>{showPetFoodFeeds()}</Col>
-      </Row>
+      <>{
+        showMainDisplay()
+      }
+      </>
     </Container>
   );
 }
