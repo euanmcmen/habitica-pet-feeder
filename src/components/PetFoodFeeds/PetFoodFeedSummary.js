@@ -32,13 +32,13 @@ const PetFoodFeedSummary = (props) => {
     <>
       <ListGroup variant="flush">
         <ListGroup.Item>
-          TotalNumberOfPetsFed: {summary.totalNumberOfPetsFed}
+          Total Number Of Pets Fed: {summary.totalNumberOfPetsFed}
         </ListGroup.Item>
         <ListGroup.Item>
-          TotalNumberOfFoodsFed: {summary.totalNumberOfFoodsFed}
+          Total Number Of Foods Fed: {summary.totalNumberOfFoodsFed}
         </ListGroup.Item>
         <ListGroup.Item>
-          TotalNumberOfSatisfiedPets: {summary.totalNumberOfPetsFedFully}
+          Total Number Of Satisfied Pets: {summary.totalNumberOfPetsFedFully}
         </ListGroup.Item>
       </ListGroup>
     </>

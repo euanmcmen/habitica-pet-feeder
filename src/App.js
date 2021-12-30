@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Accordion } from "react-bootstrap";
 import PetFoodFeedList from "./components/PetFoodFeeds/PetFoodFeedList/PetFoodFeedList";
 import PetFoodFeedSummary from "./components/PetFoodFeeds/PetFoodFeedSummary";
 import LoginForm from "./components/Login/LoginForm";
@@ -7,10 +7,6 @@ import MainDisplay from "./components/Main/MainDisplay"
 
 function App() {
   const [petFoodFeeds, setPetFoodFeeds] = useState([]);
-  
-  // const [hasPetFoodFeedsFetchError, setPetFoodFeedsFetchError] = useState(false);
-
-  // const [authenticatedUser, setAuthenticatedUser] = useState(null);
 
   const [fetchState, setFetchState] = useState(0);
 
@@ -56,33 +52,67 @@ function App() {
     return responseData;
   };
 
+  const renderComponentIfFetchComplete = (componentToRender) => {
+    if (fetchState === 0)
+      return <></>
+
+    if (fetchState === 1)
+      return <p>Fetching...</p>;
+
+    if (fetchState === -1)
+      return <p>An error occurred.</p>
+
+    return componentToRender
+  }
+
   const showMainDisplay = () => {
     if (fetchState === 0) return <p>...</p>;
 
     return <MainDisplay fetchState={fetchState} petFoodFeeds={petFoodFeeds} />
   }
 
-  //Use a Bootstrap Accordian to get a nice containerised look?
-  // https://react-bootstrap.github.io/components/accordion/
-  
-
   return (
+
+
+
+
     <Container>
       <Row>
         <Col>
           <h1 className="text-center">Habitica Pet Feeder</h1>
         </Col>
       </Row>
+
       <br />
+
       <Row>
         <Col>
-          <LoginForm onLoginSubmit={handleLoginSubmit} />
+          <Accordion defaultActiveKey="0">
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>Authentication</Accordion.Header>
+              <Accordion.Body>
+                <LoginForm onLoginSubmit={handleLoginSubmit} />
+              </Accordion.Body>
+            </Accordion.Item>
+            {renderComponentIfFetchComplete(
+              <>
+                <Accordion.Item eventKey="1">
+                  <Accordion.Header>Pet Food Feed Summary</Accordion.Header>
+                  <Accordion.Body>
+                    <PetFoodFeedSummary petFoodFeeds={petFoodFeeds} />
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="2">
+                  <Accordion.Header>Pet Food Feeds</Accordion.Header>
+                  <Accordion.Body>
+                    <PetFoodFeedList petFoodFeeds={petFoodFeeds} />
+                  </Accordion.Body>
+                </Accordion.Item>
+              </>
+            )}
+          </Accordion>
         </Col>
       </Row>
-      <>{
-        showMainDisplay()
-      }
-      </>
     </Container>
   );
 }

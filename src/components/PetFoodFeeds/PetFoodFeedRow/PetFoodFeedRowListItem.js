@@ -7,14 +7,14 @@ const PetFoodFeedRowListItem = (props) => {
       variant="primary"
     >
       <Row className="justify-content-md-center">
-        <Col md="auto">
+        <Col md={3}>
           <Row>
             <Col>
               <h3>{props.petFullName}</h3>
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col className="text-center">
               <Image
                 src={`https://habitica-assets.s3.amazonaws.com/mobileApp/images/Pet-${props.petFullName}.png`}
                 alt={props.petFullName}
@@ -25,7 +25,7 @@ const PetFoodFeedRowListItem = (props) => {
             </Col>
           </Row>
         </Col>
-        <Col>
+        <Col md={9}>
           <span>
             {[...Array(props.feedQuantity)].map((element, index) => (
               <Image
