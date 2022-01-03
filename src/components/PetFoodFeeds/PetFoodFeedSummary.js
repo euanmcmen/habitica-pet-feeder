@@ -7,8 +7,6 @@ import {
 import { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
 
-//Should accept the pet feeds structure fetched from the API, calculate the summary values, and store them.
-
 const PetFoodFeedSummary = (props) => {
   const [summary, setSummary] = useState({});
 

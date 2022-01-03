@@ -3,7 +3,6 @@ import { Container, Row, Col, Accordion } from "react-bootstrap";
 import PetFoodFeedList from "./components/PetFoodFeeds/PetFoodFeedList/PetFoodFeedList";
 import PetFoodFeedSummary from "./components/PetFoodFeeds/PetFoodFeedSummary";
 import LoginForm from "./components/Login/LoginForm";
-import MainDisplay from "./components/Main/MainDisplay"
 
 function App() {
   const [petFoodFeeds, setPetFoodFeeds] = useState([]);
@@ -26,13 +25,12 @@ function App() {
     getPetFoodFeedsAsync(authUser)
       .then((data) => {
         setPetFoodFeeds(data);
-        // setAuthenticatedUser(authUser);
-        setFetchState(2)
+        setFetchState(2);
       })
       .catch((error) => {
         console.log("whoopsie: ", error);
-        setFetchState(-1)
-      })
+        setFetchState(-1);
+      });
   };
 
   const getPetFoodFeedsAsync = async (authUser) => {
@@ -53,29 +51,16 @@ function App() {
   };
 
   const renderComponentIfFetchComplete = (componentToRender) => {
-    if (fetchState === 0)
-      return <></>
+    if (fetchState === 0) return <></>;
 
-    if (fetchState === 1)
-      return <p>Fetching...</p>;
+    if (fetchState === 1) return <p>Fetching...</p>;
 
-    if (fetchState === -1)
-      return <p>An error occurred.</p>
+    if (fetchState === -1) return <p>An error occurred.</p>;
 
-    return componentToRender
-  }
-
-  const showMainDisplay = () => {
-    if (fetchState === 0) return <p>...</p>;
-
-    return <MainDisplay fetchState={fetchState} petFoodFeeds={petFoodFeeds} />
-  }
+    return componentToRender;
+  };
 
   return (
-
-
-
-
     <Container>
       <Row>
         <Col>
