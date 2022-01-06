@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Accordion } from "react-bootstrap";
-import PetFoodFeedList from "./components/PetFoodFeeds/PetFoodFeedList/PetFoodFeedList";
-import PetFoodFeedGroupedList from "./components/PetFoodFeeds/PetFoodFeedList/PetFoodFeedGroupedList";
+import PetFoodFeedGroupedList from "./components/PetFoodFeeds/PetFoodFeedGroupedList";
 import PetFoodFeedSummary from "./components/PetFoodFeeds/PetFoodFeedSummary";
 
 import LoginForm from "./components/Login/LoginForm";

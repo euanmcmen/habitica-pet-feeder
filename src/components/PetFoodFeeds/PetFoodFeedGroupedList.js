@@ -1,7 +1,7 @@
-import { groupPetFoodFeedsByPetName } from "../../../logic/groupPetFoodFeedsByPetName";
+import { groupPetFoodFeedsByPetName } from "../../logic/groupPetFoodFeedsByPetName";
 import { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
-import PetFoodFeedGroupedRowListItem from "../PetFoodFeedRow/PetFoodFeedGroupedRowListItem";
+import PetFoodFeedGroupedRowListItem from "./PetFoodFeedGroupedRowListItem";
 
 const PetFoodFeedGroupedList = (props) => {
   const [groupedPetFoodFeeds, setGroupedPetFoodFeeds] = useState([]);
