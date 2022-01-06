@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Accordion } from "react-bootstrap";
 import PetFoodFeedList from "./components/PetFoodFeeds/PetFoodFeedList/PetFoodFeedList";
+import PetFoodFeedGroupedList from "./components/PetFoodFeeds/PetFoodFeedList/PetFoodFeedGroupedList";
 import PetFoodFeedSummary from "./components/PetFoodFeeds/PetFoodFeedSummary";
+
 import LoginForm from "./components/Login/LoginForm";
 
 function App() {
@@ -35,7 +37,7 @@ function App() {
 
   const getPetFoodFeedsAsync = async (authUser) => {
     var requestUrl =
-      "https://habitica-pet-feeder-api.azurewebsites.net/api/PetFoodFeeds";
+      "https://habitica-pet-feeder-api.azurewebsites.net/api/PetFoodFeeds/fetch";
 
     var requestOptions = {
       method: "POST",
@@ -67,9 +69,6 @@ function App() {
           <h1 className="text-center">Habitica Pet Feeder</h1>
         </Col>
       </Row>
-
-      <br />
-
       <Row>
         <Col>
           <Accordion defaultActiveKey="0">
@@ -90,7 +89,7 @@ function App() {
                 <Accordion.Item eventKey="2">
                   <Accordion.Header>Pet Food Feeds</Accordion.Header>
                   <Accordion.Body>
-                    <PetFoodFeedList petFoodFeeds={petFoodFeeds} />
+                    <PetFoodFeedGroupedList petFoodFeeds={petFoodFeeds} />
                   </Accordion.Body>
                 </Accordion.Item>
               </>

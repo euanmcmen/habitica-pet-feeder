@@ -1,40 +1,34 @@
 import { Col, Row, ListGroup, Image } from "react-bootstrap";
 
 const PetFoodFeedRowListItem = (props) => {
+  const getVariantByFeedStatus = () => (props.willSatisfyPet ? "success" : "");
+
   return (
     <ListGroup.Item
       key={`${props.petFullName}+${props.foodFullName}`}
-      variant="primary"
+      variant={getVariantByFeedStatus()}
     >
-      <Row className="justify-content-md-center">
-        <Col md={3}>
-          <Row>
-            <Col>
-              <h3>{props.petFullName}</h3>
-            </Col>
-          </Row>
-          <Row>
-            <Col className="text-center">
-              <Image
-                src={`https://habitica-assets.s3.amazonaws.com/mobileApp/images/Pet-${props.petFullName}.png`}
-                alt={props.petFullName}
-                width={100}
-                height={100}
-                roundedCircle
-              />
-            </Col>
-          </Row>
+      <Row className="align-items-center">
+        <Col md={1}>
+          <Image
+            src={`https://habitica-assets.s3.amazonaws.com/mobileApp/images/Pet-${props.petFullName}.png`}
+            alt={props.petFullName}
+            width={75}
+            height={75}
+          />
         </Col>
-        <Col md={9}>
+        <Col md={4}>
+          <h3>{props.petFullName}</h3>
+        </Col>
+        <Col>
           <span>
             {[...Array(props.feedQuantity)].map((element, index) => (
               <Image
                 key={index}
                 src={`https://habitica-assets.s3.amazonaws.com/mobileApp/images/Pet_Food_${props.foodFullName}.png`}
                 alt={props.petFullName}
-                width={100}
-                height={100}
-                roundedCircle
+                width={75}
+                height={75}
               />
             ))}
           </span>

@@ -42,4 +42,4 @@ const toGroupedPetsObject = (nameCollectionPair) => ({
   petFoodFeeds: nameCollectionPair[1],
 });
 
-module.exports = groupPetFoodFeedsByPetName;
+module.exports = { groupPetFoodFeedsByPetName };
