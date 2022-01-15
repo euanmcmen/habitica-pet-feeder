@@ -23,32 +23,53 @@ function App() {
       apiUserKey: apiKey,
     };
 
-    getPetFoodFeedsAsync(authUser)
-      .then((data) => {
-        setPetFoodFeeds(data);
-        setFetchState(2);
-      })
-      .catch((error) => {
-        console.log("whoopsie: ", error);
-        setFetchState(-1);
-      });
+    getAuthorizationTokenAsync(authUser).then((token) => {
+      getPetFoodFeedsAsync(token)
+        .then((data) => {
+          setPetFoodFeeds(data);
+          setFetchState(2);
+        })
+        .catch((error) => {
+          console.log("whoopsie: ", error);
+          setFetchState(-1);
+        });
+    });
   };
 
-  const getPetFoodFeedsAsync = async (authUser) => {
-    var requestUrl =
-      "https://habitica-pet-feeder-api.azurewebsites.net/api/PetFoodFeeds/fetch";
+  const getAuthorizationTokenAsync = async (authUser) => {
+    var authUrl =
+      "https://habitica-pet-feeder-api.azurewebsites.net/api/Auth/token";
 
-    var requestOptions = {
+    var authRequestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(authUser),
     };
 
-    var response = await fetch(requestUrl, requestOptions);
+    var authResponse = await fetch(authUrl, authRequestOptions);
 
-    var responseData = await response.json();
+    var authToken = await authResponse.text();
 
-    return responseData;
+    return authToken;
+  };
+
+  const getPetFoodFeedsAsync = async (authToken) => {
+    var fetchUrl =
+      "https://habitica-pet-feeder-api.azurewebsites.net/api/PetFoodFeeds/fetch";
+
+    var fetchRequestOptions = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authToken,
+      },
+    };
+
+    var fetchResponse = await fetch(fetchUrl, fetchRequestOptions);
+
+    var fetchResponseData = await fetchResponse.json();
+
+    return fetchResponseData;
   };
 
   const renderComponentIfFetchComplete = (componentToRender) => {
