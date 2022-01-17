@@ -36,8 +36,12 @@ const LoginForm = (props) => {
           </Form.Text>
         </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Feed Pets
+        <Button
+          variant="primary"
+          type="submit"
+          disabled={props.shouldDisableButton}
+        >
+          Continue
         </Button>
       </Form>
     </>

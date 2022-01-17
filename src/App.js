@@ -1,27 +1,26 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Accordion } from "react-bootstrap";
-import PetFoodFeedGroupedList from "./components/PetFoodFeeds/PetFoodFeedGroupedList";
-import PetFoodFeedSummary from "./components/PetFoodFeeds/PetFoodFeedSummary";
+import { Container, Row, Col } from "react-bootstrap";
 import {
   getAuthorizationTokenAsync,
   getPetFoodFeedsAsync,
 } from "./client/apiClient";
-import LoginForm from "./components/Login/LoginForm";
+import LoginForm from "./components/login/LoginForm";
+import PetFoodFeedContainer from "./components/petFoodFeeds/container/PetFoodFeedContainer";
 
 function App() {
+  const [appState, setAppState] = useState(0);
+
   const [petFoodFeeds, setPetFoodFeeds] = useState([]);
-
-  const [fetchState, setFetchState] = useState(0);
-
   const [authToken, setAuthToken] = useState("");
 
   // -1 - Error
   // 0 - Fetch not started
   // 1 - Fetch started
   // 2 - Fetch complete
+  // 3 - Feed underway
 
   const handleLoginSubmit = (userId, apiKey) => {
-    setFetchState(1);
+    setAppState(1);
 
     const authUser = {
       apiUserId: userId,
@@ -34,23 +33,13 @@ function App() {
 
         getPetFoodFeedsAsync(token).then((data) => {
           setPetFoodFeeds(data);
-          setFetchState(2);
+          setAppState(2);
         });
       })
       .catch((error) => {
         console.log("whoopsie: ", error);
-        setFetchState(-1);
+        setAppState(-1);
       });
-  };
-
-  const renderComponentIfFetchComplete = (componentToRender) => {
-    if (fetchState === 0) return <></>;
-
-    if (fetchState === 1) return <p>Fetching...</p>;
-
-    if (fetchState === -1) return <p>An error occurred.</p>;
-
-    return componentToRender;
   };
 
   return (
@@ -60,34 +49,30 @@ function App() {
           <h1 className="text-center">Habitica Pet Feeder</h1>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <Accordion defaultActiveKey="0">
-            <Accordion.Item eventKey="0">
-              <Accordion.Header>Authentication</Accordion.Header>
-              <Accordion.Body>
-                <LoginForm onLoginSubmit={handleLoginSubmit} />
-              </Accordion.Body>
-            </Accordion.Item>
-            {renderComponentIfFetchComplete(
-              <>
-                <Accordion.Item eventKey="1">
-                  <Accordion.Header>Pet Food Feed Summary</Accordion.Header>
-                  <Accordion.Body>
-                    <PetFoodFeedSummary petFoodFeeds={petFoodFeeds} />
-                  </Accordion.Body>
-                </Accordion.Item>
-                <Accordion.Item eventKey="2">
-                  <Accordion.Header>Pet Food Feeds</Accordion.Header>
-                  <Accordion.Body>
-                    <PetFoodFeedGroupedList petFoodFeeds={petFoodFeeds} />
-                  </Accordion.Body>
-                </Accordion.Item>
-              </>
-            )}
-          </Accordion>
-        </Col>
-      </Row>
+      {appState < 2 && (
+        <Row>
+          <Col>
+            <LoginForm
+              onLoginSubmit={handleLoginSubmit}
+              shouldDisableButton={appState > 0}
+            />
+          </Col>
+        </Row>
+      )}
+      {appState === 1 && (
+        <Row>
+          <Col>
+            <span>Logging in...</span>
+          </Col>
+        </Row>
+      )}
+      {appState === 2 && (
+        <PetFoodFeedContainer
+          petFoodFeeds={petFoodFeeds}
+          authToken={authToken}
+          appState={appState}
+        />
+      )}
     </Container>
   );
 }
