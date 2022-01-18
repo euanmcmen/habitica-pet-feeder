@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, ListGroup, Button } from "react-bootstrap";
+import { Row, Col, ListGroup, Button, ProgressBar } from "react-bootstrap";
 import PetFoodFeedGroupedList from "../PetFoodFeedGroupedList";
 
 import {
@@ -11,7 +11,9 @@ import {
 const PetFoodFeedContainer = (props) => {
   const [summary, setSummary] = useState({});
 
-  const [petFeedProgress, setPetFeedProgress] = useState(0);
+  const [petFoodFeedsFed, setPetFoodFeedsFed] = useState([]);
+
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     setSummary({
@@ -21,9 +23,12 @@ const PetFoodFeedContainer = (props) => {
     });
   }, [props.petFoodFeeds]);
 
-  useEffect(() => {
-    setTimeout(() => setPetFeedProgress(petFeedProgress + 1), 1000);
-  });
+  const handleButtonPressed = (event) => {
+    event.preventDefault();
+
+    setPetFoodFeedsFed([...petFoodFeedsFed, props.petFoodFeeds[index]]);
+    setIndex(index + 1);
+  };
 
   return (
     <>
@@ -47,15 +52,29 @@ const PetFoodFeedContainer = (props) => {
       <br />
       <Row>
         <Col>
-          <div>
-            <Button variant="secondary" disabled={props.shouldDisableButton}>
-              Feed Pets
-            </Button>
-            <span>
-              Pets Fed: {petFeedProgress} / {summary.numberOfPetsFed}
-            </span>
-          </div>
+          <Button
+            variant="secondary"
+            disabled={props.shouldDisableButton}
+            onClick={handleButtonPressed}
+          >
+            Feed Pets
+          </Button>
         </Col>
+        <Col>
+          <Row>
+            Pets Fed: {petFoodFeedsFed.length} / {summary.numberOfPetsFed}
+          </Row>
+          <br />
+        </Col>
+      </Row>
+      <br />
+      <Row>
+        <ProgressBar
+          now={petFoodFeedsFed.length}
+          min={0}
+          max={summary.numberOfPetsFed}
+          label={`${petFoodFeedsFed.length} / ${summary.numberOfPetsFed}`}
+        />
       </Row>
       <br />
       <Row>
