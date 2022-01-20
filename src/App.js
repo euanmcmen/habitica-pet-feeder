@@ -12,6 +12,7 @@ function App() {
 
   const [petFoodFeeds, setPetFoodFeeds] = useState([]);
   const [authToken, setAuthToken] = useState("");
+  const [rateLimitRemaining, setRateLimitRemaining] = useState("30");
 
   // -1 - Error
   // 0 - Fetch not started
@@ -31,8 +32,9 @@ function App() {
       .then((token) => {
         setAuthToken(token);
 
-        getPetFoodFeedsAsync(token).then((data) => {
-          setPetFoodFeeds(data);
+        getPetFoodFeedsAsync(token, rateLimitRemaining).then((res) => {
+          setRateLimitRemaining(res.rateLimitRemaining);
+          setPetFoodFeeds(res.response);
           setAppState(2);
         });
       })
@@ -47,6 +49,9 @@ function App() {
       <Row>
         <Col>
           <h1 className="text-center">Habitica Pet Feeder</h1>
+        </Col>
+        <Col>
+          <span>{rateLimitRemaining}</span>
         </Col>
       </Row>
       {appState < 2 && (

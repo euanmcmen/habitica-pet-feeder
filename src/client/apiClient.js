@@ -15,7 +15,7 @@ const getAuthorizationTokenAsync = async (authUser) => {
   return authToken;
 };
 
-const getPetFoodFeedsAsync = async (authToken) => {
+const getPetFoodFeedsAsync = async (authToken, rateLimitRemaining) => {
   var fetchUrl =
     "https://habitica-pet-feeder-api.azurewebsites.net/api/PetFoodFeeds/fetch";
 
@@ -23,7 +23,8 @@ const getPetFoodFeedsAsync = async (authToken) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: authToken,
+      "X-Auth-Token": authToken,
+      "X-Rate-Remaining": rateLimitRemaining,
     },
   };
 
