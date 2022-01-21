@@ -1,25 +1,24 @@
 const getAuthorizationTokenAsync = async (authUser) => {
-  var authUrl =
-    "https://habitica-pet-feeder-api.azurewebsites.net/api/Auth/token";
+  var url = "https://habitica-pet-feeder-api.azurewebsites.net/api/Auth/token";
 
-  var authRequestOptions = {
+  var requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(authUser),
   };
 
-  var authResponse = await fetch(authUrl, authRequestOptions);
+  var response = await fetch(url, requestOptions);
 
-  var authToken = await authResponse.text();
+  var responseTest = await response.text();
 
-  return authToken;
+  return responseTest;
 };
 
 const getPetFoodFeedsAsync = async (authToken, rateLimitRemaining) => {
-  var fetchUrl =
+  var url =
     "https://habitica-pet-feeder-api.azurewebsites.net/api/PetFoodFeeds/fetch";
 
-  var fetchRequestOptions = {
+  var requestOptions = {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -28,11 +27,36 @@ const getPetFoodFeedsAsync = async (authToken, rateLimitRemaining) => {
     },
   };
 
-  var fetchResponse = await fetch(fetchUrl, fetchRequestOptions);
+  var response = await fetch(url, requestOptions);
 
-  var fetchResponseData = await fetchResponse.json();
+  var responseData = await response.json();
 
-  return fetchResponseData;
+  return responseData;
 };
 
-module.exports = { getAuthorizationTokenAsync, getPetFoodFeedsAsync };
+const feedPetFoodAsync = async (authToken, rateLimitRemaining, petFoodFeed) => {
+  var url =
+    "https://habitica-pet-feeder-api.azurewebsites.net/api/PetFoodFeeds/feed";
+
+  var requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Auth-Token": authToken,
+      "X-Rate-Remaining": rateLimitRemaining,
+    },
+    body: JSON.stringify(petFoodFeed),
+  };
+
+  var response = await fetch(url, requestOptions);
+
+  var responseData = await response.json();
+
+  return responseData;
+};
+
+module.exports = {
+  getAuthorizationTokenAsync,
+  getPetFoodFeedsAsync,
+  feedPetFoodAsync,
+};

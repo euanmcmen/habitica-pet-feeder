@@ -18,7 +18,6 @@ function App() {
   // 0 - Fetch not started
   // 1 - Fetch started
   // 2 - Fetch complete
-  // 3 - Feed underway
 
   const handleLoginSubmit = (userId, apiKey) => {
     setAppState(1);
@@ -42,6 +41,10 @@ function App() {
         console.log("whoopsie: ", error);
         setAppState(-1);
       });
+  };
+
+  const handleRateLimitRemainingChanged = (newRateLimit) => {
+    setRateLimitRemaining(newRateLimit);
   };
 
   return (
@@ -75,7 +78,8 @@ function App() {
         <PetFoodFeedContainer
           petFoodFeeds={petFoodFeeds}
           authToken={authToken}
-          appState={appState}
+          rateLimitRemaining={rateLimitRemaining}
+          onRateLimitRemainingChanged={handleRateLimitRemainingChanged}
         />
       )}
     </Container>

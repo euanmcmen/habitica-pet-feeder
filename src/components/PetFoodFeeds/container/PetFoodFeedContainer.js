@@ -8,12 +8,12 @@ import {
   getNumberOfFoodsFed,
 } from "../../../logic/petFoodFeedSummaryFunctions";
 
+import { feedPetFoodAsync } from "../../../client/apiClient";
+
 const PetFoodFeedContainer = (props) => {
   const [summary, setSummary] = useState({});
 
   const [petFoodFeedsFed, setPetFoodFeedsFed] = useState([]);
-
-  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     setSummary({
@@ -26,8 +26,30 @@ const PetFoodFeedContainer = (props) => {
   const handleButtonPressed = (event) => {
     event.preventDefault();
 
-    setPetFoodFeedsFed([...petFoodFeedsFed, props.petFoodFeeds[index]]);
-    setIndex(index + 1);
+    event.target.disabled = true;
+
+    feedPetsAsync().then(() => {
+      event.target.disabled = false;
+      console.log("done");
+    });
+  };
+
+  const feedPetsAsync = async () => {
+    for (const petFoodFeed of props.petFoodFeeds) {
+      const responseData = await feedPetFoodAsync(
+        props.authToken,
+        props.rateLimitRemaining,
+        petFoodFeed
+      );
+
+      //response data is the updated rate limit.
+      props.onRateLimitRemainingChanged(responseData.rateLimitRemaining);
+
+      setPetFoodFeedsFed([...petFoodFeedsFed, petFoodFeed]);
+
+      console.log(responseData);
+      break;
+    }
   };
 
   return (
