@@ -1,4 +1,4 @@
-const getNumberOfPetsFed = (petFoodFeeds) => {
+const getNumberOfPetsToBeFed = (petFoodFeeds) => {
   const petFoodFeedNames = new Set();
 
   for (const petFoodFeed of petFoodFeeds) {
@@ -8,7 +8,7 @@ const getNumberOfPetsFed = (petFoodFeeds) => {
   return petFoodFeedNames.size;
 };
 
-const getNumberOfPetsFedFully = (petFoodFeeds) => {
+const getNumberOfPetsToBeFedFully = (petFoodFeeds) => {
   const petFoodFeedNames = new Set();
 
   for (const petFoodFeed of petFoodFeeds) {
@@ -19,12 +19,12 @@ const getNumberOfPetsFedFully = (petFoodFeeds) => {
   return petFoodFeedNames.size;
 };
 
-const getNumberOfFoodsFed = (petFoodFeeds) => {
+const getNumberOfFoodsToBeFed = (petFoodFeeds) => {
   return petFoodFeeds.reduce((acc, obj) => acc + obj.feedQuantity, 0);
 };
 
 module.exports = {
-  getNumberOfPetsFed,
-  getNumberOfPetsFedFully,
-  getNumberOfFoodsFed,
+  getNumberOfPetsToBeFed,
+  getNumberOfPetsToBeFedFully,
+  getNumberOfFoodsToBeFed,
 };

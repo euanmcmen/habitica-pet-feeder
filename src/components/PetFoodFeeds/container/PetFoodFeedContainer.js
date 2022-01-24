@@ -3,107 +3,139 @@ import { Row, Col, ListGroup, Button, ProgressBar } from "react-bootstrap";
 import PetFoodFeedGroupedList from "../PetFoodFeedGroupedList";
 
 import {
-  getNumberOfPetsFed,
-  getNumberOfPetsFedFully,
-  getNumberOfFoodsFed,
-} from "../../../logic/petFoodFeedSummaryFunctions";
+  getPetFoodFeedsAsync,
+  feedPetFoodAsync,
+} from "../../../client/apiClient";
 
-import { feedPetFoodAsync } from "../../../client/apiClient";
+import {
+  getNumberOfPetsToBeFed,
+  getNumberOfPetsToBeFedFully,
+  getNumberOfFoodsToBeFed,
+} from "../../../logic/petFoodFeedSummaryFunctions";
 
 const PetFoodFeedContainer = (props) => {
   const [summary, setSummary] = useState({});
 
-  const [petFoodFeedsFed, setPetFoodFeedsFed] = useState([]);
+  const [petFoodFeeds, setPetFoodFeeds] = useState([]);
+
+  const [rateLimitRemaining, setRateLimitRemaining] = useState("30");
+
+  const [petFoodFeedIndex, setPetFoodFeedIndex] = useState(0);
+
+  const [feedNextPet, setFeedNextPet] = useState(true);
+
+  const [isFeeding, setFeeding] = useState(false);
 
   useEffect(() => {
-    setSummary({
-      numberOfPetsFed: getNumberOfPetsFed(props.petFoodFeeds),
-      numberOfPetsFedFully: getNumberOfPetsFedFully(props.petFoodFeeds),
-      numberOfFoodsFed: getNumberOfFoodsFed(props.petFoodFeeds),
-    });
-  }, [props.petFoodFeeds]);
+    if (petFoodFeeds.length === 0) {
+      getPetFoodFeedsAsync(props.authToken, rateLimitRemaining).then((res) => {
+        setPetFoodFeeds(res.response);
+        setRateLimitRemaining(res.rateLimitRemaining);
+        setSummary({
+          numberOfPetsToBeFed: getNumberOfPetsToBeFed(res.response),
+          numberOfPetsToBeFedFully: getNumberOfPetsToBeFedFully(res.response),
+          numberOfFoodsToBeFed: getNumberOfFoodsToBeFed(res.response),
+        });
+      });
+    }
+  }, [props.authToken, rateLimitRemaining, petFoodFeeds.length]);
 
-  const handleButtonPressed = (event) => {
+  useEffect(() => {
+    if (isFeeding && feedNextPet && rateLimitRemaining !== 0) {
+      setFeedNextPet(false);
+      feedPetFoodAsync(
+        props.authToken,
+        rateLimitRemaining,
+        petFoodFeeds[petFoodFeedIndex]
+      ).then((responseData) => {
+        setRateLimitRemaining(responseData.rateLimitRemaining);
+
+        var petFoodFeedsTemp = [...petFoodFeeds];
+        petFoodFeedsTemp[petFoodFeedIndex] = {
+          ...petFoodFeedsTemp[petFoodFeedIndex],
+          isFed: true,
+        };
+        setPetFoodFeeds(petFoodFeedsTemp);
+
+        setPetFoodFeedIndex(petFoodFeedIndex + 1);
+        setFeedNextPet(true);
+      });
+    }
+  }, [
+    props.authToken,
+    rateLimitRemaining,
+    petFoodFeeds,
+    feedNextPet,
+    petFoodFeedIndex,
+    isFeeding,
+  ]);
+
+  const handleTogglePetFoodFeedingClicked = (event) => {
     event.preventDefault();
 
-    event.target.disabled = true;
-
-    feedPetsAsync().then(() => {
-      event.target.disabled = false;
-      console.log("done");
-    });
-  };
-
-  const feedPetsAsync = async () => {
-    for (const petFoodFeed of props.petFoodFeeds) {
-      const responseData = await feedPetFoodAsync(
-        props.authToken,
-        props.rateLimitRemaining,
-        petFoodFeed
-      );
-
-      //response data is the updated rate limit.
-      props.onRateLimitRemainingChanged(responseData.rateLimitRemaining);
-
-      setPetFoodFeedsFed([...petFoodFeedsFed, petFoodFeed]);
-
-      console.log(responseData);
-      break;
-    }
+    setFeeding(!isFeeding);
   };
 
   return (
     <>
-      <Row>
-        <Col>
-          <>
-            <ListGroup variant="flush">
-              <ListGroup.Item>
-                Number of pets to be fed: {summary.numberOfPetsFed}
-              </ListGroup.Item>
-              <ListGroup.Item>
-                Number of foods to be fed: {summary.numberOfFoodsFed}
-              </ListGroup.Item>
-              <ListGroup.Item>
-                Number of satisfied pets: {summary.numberOfPetsFedFully}
-              </ListGroup.Item>
-            </ListGroup>
-          </>
-        </Col>
-      </Row>
-      <br />
-      <Row>
-        <Col>
-          <Button
-            variant="secondary"
-            disabled={props.shouldDisableButton}
-            onClick={handleButtonPressed}
-          >
-            Feed Pets
-          </Button>
-        </Col>
-        <Col>
+      {petFoodFeeds.length === 0 && (
+        <Row>
+          <Col>
+            <span>Loading...</span>
+          </Col>
+        </Row>
+      )}
+      {petFoodFeeds.length > 0 && (
+        <>
           <Row>
-            Pets Fed: {petFoodFeedsFed.length} / {summary.numberOfPetsFed}
+            <Col>
+              <>
+                <ListGroup variant="flush">
+                  <ListGroup.Item>
+                    <span>Number of pets to be fed: </span>
+                    <span>{summary.numberOfPetsToBeFed}</span>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <span>Number of foods to be fed: </span>
+                    <span>{summary.numberOfFoodsToBeFed}</span>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <span>Number of pets to be fully fed: </span>
+                    <span>{summary.numberOfPetsToBeFedFully}</span>
+                  </ListGroup.Item>
+                </ListGroup>
+              </>
+            </Col>
           </Row>
           <br />
-        </Col>
-      </Row>
-      <br />
-      <Row>
-        <ProgressBar
-          now={petFoodFeedsFed.length}
-          min={0}
-          max={summary.numberOfPetsFed}
-          label={`${petFoodFeedsFed.length} / ${summary.numberOfPetsFed}`}
-        />
-      </Row>
-      <br />
-      <Row>
-        <Col>
-          <PetFoodFeedGroupedList petFoodFeeds={props.petFoodFeeds} />
-        </Col>
-      </Row>
+          <Row>
+            <Col>
+              <Button
+                variant="secondary"
+                // disabled={props.shouldDisableButton}
+                onClick={handleTogglePetFoodFeedingClicked}
+              >
+                {isFeeding ? "Start" : "Stop"} Feeding Pets
+              </Button>
+            </Col>
+          </Row>
+          <br />
+          <Row>
+            <ProgressBar
+              now={petFoodFeedIndex}
+              min={0}
+              max={petFoodFeeds.length}
+              label={`${petFoodFeedIndex} / ${petFoodFeeds.length}`}
+            />
+          </Row>
+          <br />
+          <Row>
+            <Col>
+              <PetFoodFeedGroupedList petFoodFeeds={petFoodFeeds} />
+            </Col>
+          </Row>
+        </>
+      )}
     </>
   );
 };

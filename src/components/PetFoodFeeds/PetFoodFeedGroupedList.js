@@ -10,7 +10,6 @@ const PetFoodFeedGroupedList = (props) => {
 
   useEffect(() => {
     const groupedResult = groupPetFoodFeedsByPetName(props.petFoodFeeds);
-    // setGroupedPetFoodFeeds(groupedResult);
 
     const temp = { left: [], right: [] };
 
@@ -21,9 +20,6 @@ const PetFoodFeedGroupedList = (props) => {
         temp.right.push(groupedResult[i]);
       }
     }
-
-    console.log(temp);
-
     setSplitArray(temp);
   }, [props.petFoodFeeds]);
 
