@@ -27,20 +27,20 @@ const PetFoodFeedGroupedRowListItem = (props) => {
           <ListGroup variant="flush">
             {props.petFoodFeeds.map((petFoodFeed, index) => (
               <ListGroup.Item key={index} variant={getVariantByFeedStatus()}>
-                <span>
-                  {[...Array(petFoodFeed.feedQuantity)].map(
-                    (_, index) =>
-                      !petFoodFeed.isFed && (
-                        <Image
-                          key={index}
-                          src={`https://habitica-assets.s3.amazonaws.com/mobileApp/images/Pet_Food_${petFoodFeed.foodFullName}.png`}
-                          alt={petFoodFeed.foodFullName}
-                          width={50}
-                          height={50}
-                        />
-                      )
-                  )}
-                </span>
+                {petFoodFeed.isFed && <span>Fed!</span>}
+                {!petFoodFeed.isFed && (
+                  <span>
+                    {[...Array(petFoodFeed.feedQuantity)].map((_, index) => (
+                      <Image
+                        key={index}
+                        src={`https://habitica-assets.s3.amazonaws.com/mobileApp/images/Pet_Food_${petFoodFeed.foodFullName}.png`}
+                        alt={petFoodFeed.foodFullName}
+                        width={50}
+                        height={50}
+                      />
+                    ))}
+                  </span>
+                )}
               </ListGroup.Item>
             ))}
           </ListGroup>
