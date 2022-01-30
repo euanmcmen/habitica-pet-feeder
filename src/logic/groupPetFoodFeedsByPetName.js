@@ -1,17 +1,3 @@
-//GROUPED PET FOOD FEED STRUCTURE
-// {
-//     petFullName: <string>,
-//     willSatisfyPet: <bool>,
-//     petFoodFeeds: [
-//         {
-//             petFullName: <string>,
-//             foodFullName: <string>,
-//             feedQuantity: <number>,
-//             willSatisfyPet: <bool>,
-//         },
-//     ],
-// };
-
 /**
  * @description
  * Returns a collection of Grouped PetFoodFeeds, grouped by the Pet's full name.
@@ -20,7 +6,7 @@
  *
  * @returns Collection of Grouped PetFoodFeeds by their full name.
  */
-const groupPetFoodFeedsByPetName = (petFoodFeeds) =>
+export const groupPetFoodFeedsByPetName = (petFoodFeeds) =>
   Object.entries(groupByPetFullName(petFoodFeeds)).map(toGroupedPetsObject);
 
 //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
@@ -41,5 +27,3 @@ const toGroupedPetsObject = (nameCollectionPair) => ({
   ),
   petFoodFeeds: nameCollectionPair[1],
 });
-
-module.exports = { groupPetFoodFeedsByPetName };

@@ -1,4 +1,4 @@
-const getAuthorizationTokenAsync = async (authUser) => {
+export const getAuthorizationTokenAsync = async (authUser) => {
   var url = "https://habitica-pet-feeder-api.azurewebsites.net/api/Auth/token";
 
   var requestOptions = {
@@ -14,7 +14,7 @@ const getAuthorizationTokenAsync = async (authUser) => {
   return responseTest;
 };
 
-const getUserPetFoodFeedsAsync = async (authToken) => {
+export const getUserPetFoodFeedsAsync = async (authToken) => {
   var url =
     "https://habitica-pet-feeder-api.azurewebsites.net/api/PetFoodFeeds/fetch";
 
@@ -33,7 +33,11 @@ const getUserPetFoodFeedsAsync = async (authToken) => {
   return responseData;
 };
 
-const feedPetFoodAsync = async (authToken, rateLimitInfo, petFoodFeed) => {
+export const feedPetFoodAsync = async (
+  authToken,
+  rateLimitInfo,
+  petFoodFeed
+) => {
   var url =
     "https://habitica-pet-feeder-api.azurewebsites.net/api/PetFoodFeeds/feed";
 
@@ -53,10 +57,4 @@ const feedPetFoodAsync = async (authToken, rateLimitInfo, petFoodFeed) => {
   var responseData = await response.json();
 
   return responseData;
-};
-
-module.exports = {
-  getAuthorizationTokenAsync,
-  getUserPetFoodFeedsAsync,
-  feedPetFoodAsync,
 };
