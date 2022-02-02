@@ -27,7 +27,6 @@ function App() {
         setLoginState(2);
       })
       .catch((error) => {
-        console.log("whoopsie: ", error);
         setLoginState(0);
       });
   };
