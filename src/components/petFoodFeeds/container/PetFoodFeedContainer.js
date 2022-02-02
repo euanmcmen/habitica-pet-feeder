@@ -14,36 +14,51 @@ import {
 } from "../../../logic/petFoodFeedSummaryFunctions";
 
 const PetFoodFeedContainer = (props) => {
+  //Display Pet Food Feeds
   const [summary, setSummary] = useState({});
-
   const [petFoodFeeds, setPetFoodFeeds] = useState([]);
 
+  //API
   const [userName, setUserName] = useState("");
-
   const [rateLimitInfo, setRateLimitInfo] = useState({});
 
+  //Feeding
   const [petFoodFeedIndex, setPetFoodFeedIndex] = useState(0);
-
   const [feedNextPet, setFeedNextPet] = useState(true);
-
   const [isFeeding, setFeeding] = useState(false);
 
+  //App States
+  const [apiFetchState, setApiFetchState] = useState(0);
+  //-1 -Error
+  //0 - Fetch not started - Initial state
+  //1 - Fetch Initiated
+  //2 - Fetch completed.
+
   useEffect(() => {
-    if (petFoodFeeds.length === 0) {
-      getUserPetFoodFeedsAsync(props.authToken).then((res) => {
-        setPetFoodFeeds(res.body.petFoodFeeds);
-        setUserName(res.body.userName);
-        setRateLimitInfo(res.rateLimitInfo);
-        setSummary({
-          numberOfPetsToBeFed: getNumberOfPetsToBeFed(res.body.petFoodFeeds),
-          numberOfPetsToBeFedFully: getNumberOfPetsToBeFedFully(
-            res.body.petFoodFeeds
-          ),
-          numberOfFoodsToBeFed: getNumberOfFoodsToBeFed(res.body.petFoodFeeds),
+    if (apiFetchState === 0) {
+      setApiFetchState(1);
+      getUserPetFoodFeedsAsync(props.authToken)
+        .then((res) => {
+          setApiFetchState(2);
+          //setPetFoodFeeds(res.body.petFoodFeeds);
+          setUserName(res.body.userName);
+          setRateLimitInfo(res.rateLimitInfo);
+          setSummary({
+            numberOfPetsToBeFed: getNumberOfPetsToBeFed(res.body.petFoodFeeds),
+            numberOfPetsToBeFedFully: getNumberOfPetsToBeFedFully(
+              res.body.petFoodFeeds
+            ),
+            numberOfFoodsToBeFed: getNumberOfFoodsToBeFed(
+              res.body.petFoodFeeds
+            ),
+          });
+        })
+        .catch((res) => {
+          setApiFetchState(-1);
+          console.log(res);
         });
-      });
     }
-  }, [props.authToken, rateLimitInfo, petFoodFeeds.length]);
+  }, [props.authToken, rateLimitInfo, apiFetchState]);
 
   useEffect(() => {
     if (isFeeding && feedNextPet) {
@@ -77,29 +92,68 @@ const PetFoodFeedContainer = (props) => {
 
   const handleTogglePetFoodFeedingClicked = (event) => {
     event.preventDefault();
-
     setFeeding(!isFeeding);
   };
 
   return (
     <>
       {petFoodFeeds.length === 0 && (
-        <Row>
-          <Col>
-            <span>Loading...</span>
-          </Col>
-        </Row>
-      )}
-      {petFoodFeeds.length > 0 && (
-        <Row className="align-items-top">
-          <Col>
-            <h3>Username</h3>
-            <p>{userName}</p>
-          </Col>
-        </Row>
-      )}
-      {petFoodFeeds.length > 0 && (
         <>
+          {apiFetchState === 1 && (
+            <Row>
+              <Col>
+                <span>Fetching your Habitica pets and food information...</span>
+              </Col>
+            </Row>
+          )}
+          {apiFetchState === -1 && (
+            <Row>
+              <Col>
+                <p>
+                  No user information was found for your credentials. Click
+                  below to log in again.
+                </p>
+                <p>
+                  Note: Your user id and API key are different from your
+                  username and password. Make sure you enter your user id and
+                  API key.
+                </p>
+              </Col>
+            </Row>
+          )}
+          {apiFetchState === 2 && (
+            <>
+              <Row className="align-items-top">
+                <Col>
+                  <h3>Username</h3>
+                  <p>{userName}</p>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <p>
+                    Your API details were correct, but we couldn't figure out
+                    your pet feeds.
+                  </p>
+                  <p>You may have no food or pets which can be fed.</p>
+                  <p>
+                    Note: Pets which have already grown into mounts and pets
+                    which have not been hatched cannot be fed.
+                  </p>
+                </Col>
+              </Row>
+            </>
+          )}
+        </>
+      )}
+      {apiFetchState === 2 && petFoodFeeds.length > 0 && (
+        <>
+          <Row className="align-items-top">
+            <Col>
+              <h3>Username</h3>
+              <p>{userName}</p>
+            </Col>
+          </Row>
           <Row className="align-items-top">
             <Col>
               <h3>Pets to be fed</h3>
@@ -128,7 +182,6 @@ const PetFoodFeedContainer = (props) => {
             <Col>
               <Button
                 variant="secondary"
-                // disabled={props.shouldDisableButton}
                 onClick={handleTogglePetFoodFeedingClicked}
               >
                 {isFeeding ? "Stop" : "Start"} Feeding Pets
