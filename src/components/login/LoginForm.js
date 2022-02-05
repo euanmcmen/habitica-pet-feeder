@@ -59,7 +59,7 @@ const LoginForm = (props) => {
           type="submit"
           disabled={props.shouldDisableButton}
         >
-          Continue
+          Log In
         </Button>
       </Form>
     </>

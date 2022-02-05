@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Navbar, Nav } from "react-bootstrap";
 import { getAuthorizationTokenAsync } from "./client/apiClient";
+import { AppNavBar } from "./components/common/AppNavBar";
+import { Collapsable } from "./components/common/Collapsable";
+import { LoginInfo } from "./components/common/LoginInfo";
 import LoginForm from "./components/login/LoginForm";
 import PetFoodFeedContainer from "./components/petFoodFeeds/container/PetFoodFeedContainer";
 
@@ -32,31 +35,35 @@ function App() {
   };
 
   return (
-    <Container>
-      <Row>
-        <Col>
-          <h1 className="text-center">Habitica Pet Feeder</h1>
-        </Col>
-      </Row>
-      {loginState < 2 && (
-        <Row>
-          <Col>
-            <LoginForm
-              onLoginSubmit={handleLoginSubmit}
-              shouldDisableButton={loginState > 0}
-            />
-          </Col>
-        </Row>
-      )}
-      {loginState === 1 && (
-        <Row>
-          <Col>
-            <span>Logging in...</span>
-          </Col>
-        </Row>
-      )}
-      {loginState > 1 && <PetFoodFeedContainer authToken={authToken} />}
-    </Container>
+    <>
+      <AppNavBar />
+      <Container>
+        <LoginInfo />
+      </Container>
+
+      <br />
+
+      <Container>
+        {loginState < 2 && (
+          <Row>
+            <Col>
+              <LoginForm
+                onLoginSubmit={handleLoginSubmit}
+                shouldDisableButton={loginState > 0}
+              />
+            </Col>
+          </Row>
+        )}
+        {loginState === 1 && (
+          <Row>
+            <Col>
+              <span>Logging in...</span>
+            </Col>
+          </Row>
+        )}
+        {loginState > 1 && <PetFoodFeedContainer authToken={authToken} />}
+      </Container>
+    </>
   );
 }
 

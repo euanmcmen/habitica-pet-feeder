@@ -40,7 +40,7 @@ const PetFoodFeedContainer = (props) => {
       getUserPetFoodFeedsAsync(props.authToken)
         .then((res) => {
           setApiFetchState(2);
-          //setPetFoodFeeds(res.body.petFoodFeeds);
+          setPetFoodFeeds(res.body.petFoodFeeds);
           setUserName(res.body.userName);
           setRateLimitInfo(res.rateLimitInfo);
           setSummary({
