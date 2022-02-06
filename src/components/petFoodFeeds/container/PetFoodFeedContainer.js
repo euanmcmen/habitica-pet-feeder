@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, ListGroup, Button, ProgressBar } from "react-bootstrap";
-import PetFoodFeedGroupedList from "../PetFoodFeedGroupedList";
+import PetFoodFeedCarouselList from "../PetFoodFeedCarouselList";
 
 import {
   getUserPetFoodFeedsAsync,
@@ -95,6 +95,11 @@ const PetFoodFeedContainer = (props) => {
     setFeeding(!isFeeding);
   };
 
+  const getTogglePetFoodFeedingButtonText = () => {
+    if (!isFeeding && !feedNextPet) return "Waiting...";
+    return isFeeding ? "Pause Feeding" : "Start Feeding";
+  };
+
   return (
     <>
       {petFoodFeeds.length === 0 && (
@@ -167,12 +172,12 @@ const PetFoodFeedContainer = (props) => {
                   <span>{summary.numberOfPetsToBeFed}</span>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <span>Number of foods to be fed: </span>
-                  <span>{summary.numberOfFoodsToBeFed}</span>
-                </ListGroup.Item>
-                <ListGroup.Item>
                   <span>Number of pets to be fully fed: </span>
                   <span>{summary.numberOfPetsToBeFedFully}</span>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <span>Number of foods to be fed: </span>
+                  <span>{summary.numberOfFoodsToBeFed}</span>
                 </ListGroup.Item>
               </ListGroup>
             </Col>
@@ -183,8 +188,9 @@ const PetFoodFeedContainer = (props) => {
               <Button
                 variant="secondary"
                 onClick={handleTogglePetFoodFeedingClicked}
+                disabled={!isFeeding && !feedNextPet}
               >
-                {isFeeding ? "Stop" : "Start"} Feeding Pets
+                {getTogglePetFoodFeedingButtonText()}
               </Button>
             </Col>
           </Row>
@@ -200,7 +206,10 @@ const PetFoodFeedContainer = (props) => {
           <br />
           <Row>
             <Col>
-              <PetFoodFeedGroupedList petFoodFeeds={petFoodFeeds} />
+              <PetFoodFeedCarouselList
+                petFoodFeedIndex={petFoodFeedIndex}
+                petFoodFeeds={petFoodFeeds}
+              />
             </Col>
           </Row>
         </>
