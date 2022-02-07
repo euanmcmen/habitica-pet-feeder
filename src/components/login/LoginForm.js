@@ -33,7 +33,12 @@ const LoginForm = (props) => {
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formUserId">
           <Form.Label>User Id</Form.Label>
-          <Form.Control required type="text" placeholder="Enter Used Id..." />
+          <Form.Control
+            required
+            type="text"
+            placeholder="Enter Used Id..."
+            disabled={props.shouldDisableForm}
+          />
           <Form.Control.Feedback type="invalid">
             Please enter your User Id.
           </Form.Control.Feedback>
@@ -45,6 +50,7 @@ const LoginForm = (props) => {
             required
             type="password"
             placeholder="Enter API key..."
+            disabled={props.shouldDisableForm}
           />
           <Form.Text className="text-muted">
             Your API Key will not be saved to any external database.
@@ -57,7 +63,7 @@ const LoginForm = (props) => {
         <Button
           variant="primary"
           type="submit"
-          disabled={props.shouldDisableButton}
+          disabled={props.shouldDisableForm}
         >
           Log In
         </Button>

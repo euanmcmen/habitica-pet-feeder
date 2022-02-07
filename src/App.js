@@ -1,37 +1,15 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Navbar, Nav } from "react-bootstrap";
-import { getAuthorizationTokenAsync } from "./client/apiClient";
+import { Container } from "react-bootstrap";
 import { AppNavBar } from "./components/common/AppNavBar";
-import { Collapsable } from "./components/common/Collapsable";
 import { LoginInfo } from "./components/common/LoginInfo";
-import LoginForm from "./components/login/LoginForm";
+import LoginContainer from "./components/login/container/LoginContainer";
 import PetFoodFeedContainer from "./components/petFoodFeeds/container/PetFoodFeedContainer";
 
 function App() {
-  const [loginState, setLoginState] = useState(0);
-
   const [authToken, setAuthToken] = useState("");
 
-  // 0 - Not logged in.
-  // 1 - Log in started
-  // 2 - Log in complete.
-
-  const handleLoginSubmit = (userId, apiKey) => {
-    setLoginState(1);
-
-    const authUser = {
-      apiUserId: userId,
-      apiUserKey: apiKey,
-    };
-
-    getAuthorizationTokenAsync(authUser)
-      .then((token) => {
-        setAuthToken(token);
-        setLoginState(2);
-      })
-      .catch((error) => {
-        setLoginState(0);
-      });
+  const handleLoginSuccessful = (token) => {
+    setAuthToken(token);
   };
 
   return (
@@ -44,24 +22,11 @@ function App() {
       <br />
 
       <Container>
-        {loginState < 2 && (
-          <Row>
-            <Col>
-              <LoginForm
-                onLoginSubmit={handleLoginSubmit}
-                shouldDisableButton={loginState > 0}
-              />
-            </Col>
-          </Row>
+        {authToken === "" ? (
+          <LoginContainer onLoginSuccessful={handleLoginSuccessful} />
+        ) : (
+          <PetFoodFeedContainer authToken={authToken} />
         )}
-        {loginState === 1 && (
-          <Row>
-            <Col>
-              <span>Logging in...</span>
-            </Col>
-          </Row>
-        )}
-        {loginState > 1 && <PetFoodFeedContainer authToken={authToken} />}
       </Container>
     </>
   );
