@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Row, Col, ListGroup, Button, ProgressBar } from "react-bootstrap";
 import PetFoodFeedCarouselList from "../PetFoodFeedCarouselList";
 
@@ -14,6 +15,8 @@ import {
 } from "../../../logic/petFoodFeedSummaryFunctions";
 
 const PetFoodFeedContainer = (props) => {
+  const authToken = useSelector((state) => state.login.authToken);
+
   //Display Pet Food Feeds
   const [summary, setSummary] = useState({});
   const [petFoodFeeds, setPetFoodFeeds] = useState([]);
@@ -37,7 +40,7 @@ const PetFoodFeedContainer = (props) => {
   useEffect(() => {
     if (apiFetchState === 0) {
       setApiFetchState(1);
-      getUserPetFoodFeedsAsync(props.authToken)
+      getUserPetFoodFeedsAsync(authToken)
         .then((res) => {
           setApiFetchState(2);
           setPetFoodFeeds(res.body.petFoodFeeds);
@@ -58,13 +61,13 @@ const PetFoodFeedContainer = (props) => {
           console.log(res);
         });
     }
-  }, [props.authToken, rateLimitInfo, apiFetchState]);
+  }, [authToken, rateLimitInfo, apiFetchState]);
 
   useEffect(() => {
     if (isFeeding && feedNextPet) {
       setFeedNextPet(false);
       feedPetFoodAsync(
-        props.authToken,
+        authToken,
         rateLimitInfo,
         petFoodFeeds[petFoodFeedIndex]
       ).then((res) => {
@@ -82,7 +85,7 @@ const PetFoodFeedContainer = (props) => {
       });
     }
   }, [
-    props.authToken,
+    authToken,
     rateLimitInfo,
     petFoodFeeds,
     feedNextPet,
