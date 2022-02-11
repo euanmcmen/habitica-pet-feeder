@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Row, Col, ListGroup, Button, ProgressBar } from "react-bootstrap";
 import PetFoodFeedCarouselList from "../PetFoodFeedCarouselList";
 
@@ -14,19 +14,34 @@ import {
   getNumberOfFoodsToBeFed,
 } from "../../../logic/petFoodFeedSummaryFunctions";
 
-const PetFoodFeedContainer = (props) => {
-  const authToken = useSelector((state) => state.login.authToken);
+import {
+  setUserNameAndRateLimitInfo,
+  setRateLimitInfo,
+} from "../../../slices/apiConnectionSlice";
 
-  //Display Pet Food Feeds
-  const [summary, setSummary] = useState({});
-  const [petFoodFeeds, setPetFoodFeeds] = useState([]);
+import {
+  setPetFoodFeeds,
+  setSummary,
+  setPetFedAtIndex,
+} from "../../../slices/petFoodFeedSlice";
+
+const PetFoodFeedContainer = (props) => {
+  const dispatch = useDispatch();
 
   //API
-  const [userName, setUserName] = useState("");
-  const [rateLimitInfo, setRateLimitInfo] = useState({});
+  const authToken = useSelector((state) => state.apiConnection.authToken);
 
-  //Feeding
-  const [petFoodFeedIndex, setPetFoodFeedIndex] = useState(0);
+  const userName = useSelector((state) => state.apiConnection.userName);
+
+  const rateLimitInfo = useSelector(
+    (state) => state.apiConnection.rateLimitInfo
+  );
+
+  //Pet Food Feeds
+  const petFoodFeeds = useSelector((state) => state.petFoodFeed.feeds);
+  const summary = useSelector((state) => state.petFoodFeed.feedSummary);
+  const petFoodFeedIndex = useSelector((state) => state.petFoodFeed.feedIndex);
+
   const [feedNextPet, setFeedNextPet] = useState(true);
   const [isFeeding, setFeeding] = useState(false);
 
@@ -43,54 +58,61 @@ const PetFoodFeedContainer = (props) => {
       getUserPetFoodFeedsAsync(authToken)
         .then((res) => {
           setApiFetchState(2);
-          setPetFoodFeeds(res.body.petFoodFeeds);
-          setUserName(res.body.userName);
-          setRateLimitInfo(res.rateLimitInfo);
-          setSummary({
-            numberOfPetsToBeFed: getNumberOfPetsToBeFed(res.body.petFoodFeeds),
-            numberOfPetsToBeFedFully: getNumberOfPetsToBeFedFully(
-              res.body.petFoodFeeds
-            ),
-            numberOfFoodsToBeFed: getNumberOfFoodsToBeFed(
-              res.body.petFoodFeeds
-            ),
-          });
+
+          dispatch(setPetFoodFeeds(res.body.petFoodFeeds));
+
+          dispatch(
+            setUserNameAndRateLimitInfo({
+              userName: res.body.userName,
+              rateLimitInfo: res.rateLimitInfo,
+            })
+          );
+
+          dispatch(
+            setSummary({
+              numberOfPetsToBeFed: getNumberOfPetsToBeFed(
+                res.body.petFoodFeeds
+              ),
+              numberOfPetsToBeFedFully: getNumberOfPetsToBeFedFully(
+                res.body.petFoodFeeds
+              ),
+              numberOfFoodsToBeFed: getNumberOfFoodsToBeFed(
+                res.body.petFoodFeeds
+              ),
+            })
+          );
         })
         .catch((res) => {
           setApiFetchState(-1);
           console.log(res);
         });
     }
-  }, [authToken, rateLimitInfo, apiFetchState]);
+  }, [authToken, rateLimitInfo, apiFetchState, dispatch]);
 
   useEffect(() => {
     if (isFeeding && feedNextPet) {
       setFeedNextPet(false);
+
       feedPetFoodAsync(
         authToken,
         rateLimitInfo,
         petFoodFeeds[petFoodFeedIndex]
       ).then((res) => {
-        setRateLimitInfo(res.rateLimitInfo);
+        dispatch(setRateLimitInfo(res.rateLimitInfo));
 
-        var petFoodFeedsTemp = [...petFoodFeeds];
-        petFoodFeedsTemp[petFoodFeedIndex] = {
-          ...petFoodFeedsTemp[petFoodFeedIndex],
-          isFed: true,
-        };
-        setPetFoodFeeds(petFoodFeedsTemp);
+        dispatch(setPetFedAtIndex(petFoodFeedIndex));
 
-        setPetFoodFeedIndex(petFoodFeedIndex + 1);
         setFeedNextPet(true);
       });
     }
   }, [
+    isFeeding,
+    feedNextPet,
     authToken,
     rateLimitInfo,
     petFoodFeeds,
-    feedNextPet,
     petFoodFeedIndex,
-    isFeeding,
+    dispatch,
   ]);
 
   const handleTogglePetFoodFeedingClicked = (event) => {
@@ -110,7 +132,7 @@ const PetFoodFeedContainer = (props) => {
           {apiFetchState === 1 && (
             <Row>
               <Col>
-                <span>Fetching your Habitica pets and food information...</span>
+                <span>Fetching your pets and foods...</span>
               </Col>
             </Row>
           )}
@@ -154,7 +176,7 @@ const PetFoodFeedContainer = (props) => {
           )}
         </>
       )}
-      {apiFetchState === 2 && petFoodFeeds.length > 0 && (
+      {petFoodFeeds.length > 0 && apiFetchState === 2 && (
         <>
           <Row className="align-items-top">
             <Col>
@@ -164,7 +186,7 @@ const PetFoodFeedContainer = (props) => {
           </Row>
           <Row className="align-items-top">
             <Col>
-              <h3>Pets to be fed</h3>
+              <h3>Summary</h3>
             </Col>
           </Row>
           <Row>

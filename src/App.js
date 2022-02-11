@@ -7,7 +7,7 @@ import LoginContainer from "./components/login/container/LoginContainer";
 import PetFoodFeedContainer from "./components/petFoodFeeds/container/PetFoodFeedContainer";
 
 function App() {
-  const authToken = useSelector((state) => state.login.authToken);
+  const authToken = useSelector((state) => state.apiConnection.authToken);
 
   return (
     <>

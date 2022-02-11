@@ -1,6 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import loginReducer from "../slices/loginSlice";
+import apiConnectionReducer from "../slices/apiConnectionSlice";
+import petFoodFeedReducer from "../slices/petFoodFeedSlice";
 
 export default configureStore({
-  reducer: { login: loginReducer },
+  reducer: {
+    apiConnection: apiConnectionReducer,
+    petFoodFeed: petFoodFeedReducer,
+  },
 });
