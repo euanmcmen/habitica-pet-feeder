@@ -4,6 +4,7 @@ import { Row, Col } from "react-bootstrap";
 import { getAuthorizationTokenAsync } from "../../../client/apiClient";
 import LoginForm from "../LoginForm";
 import { setAuthToken } from "../../../slices/apiConnectionSlice";
+import { LoginInfo } from "../../info/LoginInfo";
 
 const LoginContainer = (props) => {
   const dispatch = useDispatch();
@@ -30,6 +31,8 @@ const LoginContainer = (props) => {
 
   return (
     <>
+      <LoginInfo />
+      <br />
       <Row>
         <Col>
           <LoginForm

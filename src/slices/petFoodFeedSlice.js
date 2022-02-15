@@ -6,6 +6,8 @@ export const petFoodFeedSlice = createSlice({
     feeds: [],
     feedSummary: {},
     feedIndex: 0,
+    isFeedingPets: false,
+    isFeedingPet: false,
   },
 
   reducers: {
@@ -21,10 +23,32 @@ export const petFoodFeedSlice = createSlice({
       state.feeds[action.payload].isFed = true;
       state.feedIndex = action.payload + 1;
     },
+
+    setFeedingPets: (state, action) => {
+      state.isFeedingPets = action.payload;
+    },
+
+    setFeedingPet: (state, action) => {
+      state.isFeedingPet = action.payload;
+    },
+
+    clearPetFoodFeeds: (state) => {
+      state.feeds = [];
+      state.feedSummary = {};
+      state.feedIndex = 0;
+      state.isFeeding = false;
+      state.isFeedingPet = false;
+    },
   },
 });
 
-export const { setPetFoodFeeds, setPetFedAtIndex, setSummary } =
-  petFoodFeedSlice.actions;
+export const {
+  setPetFoodFeeds,
+  setPetFedAtIndex,
+  setSummary,
+  setFeedingPets,
+  setFeedingPet,
+  clearPetFoodFeeds,
+} = petFoodFeedSlice.actions;
 
 export default petFoodFeedSlice.reducer;

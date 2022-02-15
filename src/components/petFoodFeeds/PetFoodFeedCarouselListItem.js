@@ -23,20 +23,17 @@ const PetFoodFeedCarouselListItem = (props) => {
         </Col>
         <Col>
           <>
-            {props.isFed && <p>Fed!</p>}
-            {!props.isFed && (
-              <span>
-                {[...Array(props.feedQuantity)].map((_, index) => (
-                  <Image
-                    key={index}
-                    src={`https://habitica-assets.s3.amazonaws.com/mobileApp/images/Pet_Food_${props.foodFullName}.png`}
-                    alt={props.foodFullName}
-                    width={100}
-                    height={100}
-                  />
-                ))}
-              </span>
-            )}
+            <span>
+              {[...Array(props.feedQuantity)].map((_, index) => (
+                <Image
+                  key={index}
+                  src={`https://habitica-assets.s3.amazonaws.com/mobileApp/images/Pet_Food_${props.foodFullName}.png`}
+                  alt={props.foodFullName}
+                  width={100}
+                  height={100}
+                />
+              ))}
+            </span>
           </>
         </Col>
       </Row>

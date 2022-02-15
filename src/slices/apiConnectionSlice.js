@@ -20,10 +20,20 @@ export const apiConnectionSlice = createSlice({
     setRateLimitInfo: (state, action) => {
       state.rateLimitInfo = action.payload;
     },
+
+    clearApiConnection: (state) => {
+      state.authToken = "";
+      state.userName = "";
+      state.rateLimitInfo = {};
+    },
   },
 });
 
-export const { setAuthToken, setUserNameAndRateLimitInfo, setRateLimitInfo } =
-  apiConnectionSlice.actions;
+export const {
+  setAuthToken,
+  setUserNameAndRateLimitInfo,
+  setRateLimitInfo,
+  clearApiConnection,
+} = apiConnectionSlice.actions;
 
 export default apiConnectionSlice.reducer;

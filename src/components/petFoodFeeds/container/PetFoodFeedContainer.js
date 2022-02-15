@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Row, Col, ListGroup, Button, ProgressBar } from "react-bootstrap";
+import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import PetFoodFeedCarouselList from "../PetFoodFeedCarouselList";
-
+import PetFoodFeedSummary from "../parts/summary/PetFoodFeedSummary";
+import { PetFoodFeedProgressBar } from "../parts/progressBar/PetFoodFeedProgressBar";
+import { PetFoodFeedInfo } from "../../info/PetFoodFeedInfo";
 import {
   getUserPetFoodFeedsAsync,
   feedPetFoodAsync,
@@ -23,7 +25,10 @@ import {
   setPetFoodFeeds,
   setSummary,
   setPetFedAtIndex,
+  setFeedingPets,
+  setFeedingPet,
 } from "../../../slices/petFoodFeedSlice";
+import LogoutControl from "../../login/LogoutControl";
 
 const PetFoodFeedContainer = (props) => {
   const dispatch = useDispatch();
@@ -31,19 +36,15 @@ const PetFoodFeedContainer = (props) => {
   //API
   const authToken = useSelector((state) => state.apiConnection.authToken);
 
-  const userName = useSelector((state) => state.apiConnection.userName);
-
   const rateLimitInfo = useSelector(
     (state) => state.apiConnection.rateLimitInfo
   );
 
   //Pet Food Feeds
   const petFoodFeeds = useSelector((state) => state.petFoodFeed.feeds);
-  const summary = useSelector((state) => state.petFoodFeed.feedSummary);
   const petFoodFeedIndex = useSelector((state) => state.petFoodFeed.feedIndex);
-
-  const [feedNextPet, setFeedNextPet] = useState(true);
-  const [isFeeding, setFeeding] = useState(false);
+  const isFeedingPets = useSelector((state) => state.petFoodFeed.isFeedingPets);
+  const isFeedingPet = useSelector((state) => state.petFoodFeed.isFeedingPet);
 
   //App States
   const [apiFetchState, setApiFetchState] = useState(0);
@@ -90,8 +91,8 @@ const PetFoodFeedContainer = (props) => {
   }, [authToken, rateLimitInfo, apiFetchState, dispatch]);
 
   useEffect(() => {
-    if (isFeeding && feedNextPet) {
-      setFeedNextPet(false);
+    if (isFeedingPets && !isFeedingPet) {
+      dispatch(setFeedingPet(true));
 
       feedPetFoodAsync(
         authToken,
@@ -102,12 +103,12 @@ const PetFoodFeedContainer = (props) => {
 
         dispatch(setPetFedAtIndex(petFoodFeedIndex));
 
-        setFeedNextPet(true);
+        dispatch(setFeedingPet(false));
       });
     }
   }, [
-    isFeeding,
-    feedNextPet,
+    isFeedingPets,
+    isFeedingPet,
     authToken,
     rateLimitInfo,
     petFoodFeeds,
@@ -115,14 +116,18 @@ const PetFoodFeedContainer = (props) => {
     dispatch,
   ]);
 
+  const handleModelHide = () => {
+    dispatch(setFeedingPets(false));
+  };
+
   const handleTogglePetFoodFeedingClicked = (event) => {
     event.preventDefault();
-    setFeeding(!isFeeding);
+    dispatch(setFeedingPets(true));
   };
 
   const getTogglePetFoodFeedingButtonText = () => {
-    if (!isFeeding && !feedNextPet) return "Waiting...";
-    return isFeeding ? "Pause Feeding" : "Start Feeding";
+    if (!isFeedingPets && isFeedingPet) return "Waiting...";
+    return isFeedingPets ? "Pause Feeding" : "Start Feeding";
   };
 
   return (
@@ -153,12 +158,7 @@ const PetFoodFeedContainer = (props) => {
           )}
           {apiFetchState === 2 && (
             <>
-              <Row className="align-items-top">
-                <Col>
-                  <h3>Username</h3>
-                  <p>{userName}</p>
-                </Col>
-              </Row>
+              <LogoutControl />
               <Row>
                 <Col>
                   <p>
@@ -178,65 +178,70 @@ const PetFoodFeedContainer = (props) => {
       )}
       {petFoodFeeds.length > 0 && apiFetchState === 2 && (
         <>
+          <LogoutControl />
+          <br />
+          <PetFoodFeedInfo />
+          <br />
           <Row className="align-items-top">
             <Col>
-              <h3>Username</h3>
-              <p>{userName}</p>
-            </Col>
-          </Row>
-          <Row className="align-items-top">
-            <Col>
-              <h3>Summary</h3>
+              <h3>Status</h3>
             </Col>
           </Row>
           <Row>
             <Col>
-              <ListGroup variant="flush">
-                <ListGroup.Item>
-                  <span>Number of pets to be fed: </span>
-                  <span>{summary.numberOfPetsToBeFed}</span>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <span>Number of pets to be fully fed: </span>
-                  <span>{summary.numberOfPetsToBeFedFully}</span>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <span>Number of foods to be fed: </span>
-                  <span>{summary.numberOfFoodsToBeFed}</span>
-                </ListGroup.Item>
-              </ListGroup>
+              <PetFoodFeedSummary />
             </Col>
           </Row>
           <br />
           <Row>
-            <Col>
-              <Button
-                variant="secondary"
-                onClick={handleTogglePetFoodFeedingClicked}
-                disabled={!isFeeding && !feedNextPet}
-              >
-                {getTogglePetFoodFeedingButtonText()}
-              </Button>
-            </Col>
-          </Row>
-          <br />
-          <Row>
-            <ProgressBar
-              now={petFoodFeedIndex}
-              min={0}
+            <PetFoodFeedProgressBar
+              value={petFoodFeedIndex}
               max={petFoodFeeds.length}
-              label={`${petFoodFeedIndex} / ${petFoodFeeds.length}`}
             />
           </Row>
           <br />
           <Row>
             <Col>
-              <PetFoodFeedCarouselList
-                petFoodFeedIndex={petFoodFeedIndex}
-                petFoodFeeds={petFoodFeeds}
-              />
+              <Button
+                variant="primary"
+                onClick={handleTogglePetFoodFeedingClicked}
+                disabled={!isFeedingPets && isFeedingPet}
+              >
+                {getTogglePetFoodFeedingButtonText()}
+              </Button>
             </Col>
           </Row>
+
+          <br />
+
+          <Modal
+            show={isFeedingPets || isFeedingPet}
+            onHide={handleModelHide}
+            dialogClassName="modal-90w-80w"
+            animation={false}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Pet Food Feeder</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Container>
+                <Row>
+                  <Col>
+                    <PetFoodFeedCarouselList
+                      petFoodFeedIndex={petFoodFeedIndex}
+                      petFoodFeeds={petFoodFeeds}
+                    />
+                  </Col>
+                </Row>
+                <br />
+              </Container>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleModelHide}>
+                Stop
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </>
       )}
     </>
