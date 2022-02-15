@@ -1,6 +1,6 @@
 import { Card } from "react-bootstrap";
 
-export const LoginInfo = () => {
+const LoginInfo = () => {
   return (
     <Card border="info">
       <Card.Title>Info</Card.Title>
@@ -25,3 +25,5 @@ export const LoginInfo = () => {
     </Card>
   );
 };
+
+export default LoginInfo;

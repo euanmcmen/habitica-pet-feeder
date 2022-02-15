@@ -1,6 +1,6 @@
 import { Card } from "react-bootstrap";
 
-export const PetFoodFeedInfo = () => {
+const PetFoodFeedInfo = () => {
   return (
     <Card border="info">
       <Card.Title>Info</Card.Title>
@@ -16,3 +16,5 @@ export const PetFoodFeedInfo = () => {
     </Card>
   );
 };
+
+export default PetFoodFeedInfo;

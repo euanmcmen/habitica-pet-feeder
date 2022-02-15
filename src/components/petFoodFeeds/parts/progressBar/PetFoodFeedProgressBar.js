@@ -1,7 +1,7 @@
 import React from "react";
 import { ProgressBar } from "react-bootstrap";
 
-export const PetFoodFeedProgressBar = (props) => {
+const PetFoodFeedProgressBar = (props) => {
   return (
     <ProgressBar
       now={props.value}
@@ -11,3 +11,5 @@ export const PetFoodFeedProgressBar = (props) => {
     />
   );
 };
+
+export default PetFoodFeedProgressBar;

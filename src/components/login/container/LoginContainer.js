@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Row, Col } from "react-bootstrap";
 import { getAuthorizationTokenAsync } from "../../../client/apiClient";
-import LoginForm from "../LoginForm";
 import { setAuthToken } from "../../../slices/apiConnectionSlice";
-import { LoginInfo } from "../../info/LoginInfo";
+import LoginForm from "../LoginForm";
+import LoginInfo from "../../info/LoginInfo";
 
 const LoginContainer = (props) => {
   const dispatch = useDispatch();

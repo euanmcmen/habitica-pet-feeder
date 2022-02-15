@@ -3,8 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import PetFoodFeedCarouselList from "../PetFoodFeedCarouselList";
 import PetFoodFeedSummary from "../parts/summary/PetFoodFeedSummary";
-import { PetFoodFeedProgressBar } from "../parts/progressBar/PetFoodFeedProgressBar";
-import { PetFoodFeedInfo } from "../../info/PetFoodFeedInfo";
+import PetFoodFeedProgressBar from "../parts/progressBar/PetFoodFeedProgressBar";
+import PetFoodFeedInfo from "../../info/PetFoodFeedInfo";
+import LogoutControl from "../../login/LogoutControl";
+
 import {
   getUserPetFoodFeedsAsync,
   feedPetFoodAsync,
@@ -28,7 +30,6 @@ import {
   setFeedingPets,
   setFeedingPet,
 } from "../../../slices/petFoodFeedSlice";
-import LogoutControl from "../../login/LogoutControl";
 
 const PetFoodFeedContainer = (props) => {
   const dispatch = useDispatch();
