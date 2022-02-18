@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { ListGroup } from "react-bootstrap";
 
-const PetFoodFeedSummary = (props) => {
+const PetFoodFeedSummary = () => {
   const summary = useSelector((state) => state.petFoodFeed.feedSummary);
 
   return (

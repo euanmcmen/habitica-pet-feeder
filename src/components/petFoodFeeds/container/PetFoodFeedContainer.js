@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col, Button, Modal } from "react-bootstrap";
-import PetFoodFeedCarouselList from "../PetFoodFeedCarouselList";
-import PetFoodFeedSummary from "../parts/summary/PetFoodFeedSummary";
-import PetFoodFeedProgressBar from "../parts/progressBar/PetFoodFeedProgressBar";
+import PetFoodFeedCarouselList from "../list/PetFoodFeedCarouselList";
+import PetFoodFeedSummary from "../summary/PetFoodFeedSummary";
+import PetFoodFeedProgressBar from "../progressBar/PetFoodFeedProgressBar";
 import PetFoodFeedInfo from "../../info/PetFoodFeedInfo";
-import LogoutControl from "../../login/LogoutControl";
+import PetFoodFeedFetching from "../PetFoodFeedFetching";
+import PetFoodFeedNoUser from "../PetFoodFeedNoUser";
+import PetFoodFeedNoFeeds from "../PetFoodFeedNoFeeds";
 
 import {
   getUserPetFoodFeedsAsync,
@@ -86,7 +88,6 @@ const PetFoodFeedContainer = (props) => {
         })
         .catch((res) => {
           setApiFetchState(-1);
-          console.log(res);
         });
     }
   }, [authToken, rateLimitInfo, apiFetchState, dispatch]);
@@ -135,52 +136,17 @@ const PetFoodFeedContainer = (props) => {
     <>
       {petFoodFeeds.length === 0 && (
         <>
-          {apiFetchState === 1 && (
-            <Row>
-              <Col>
-                <span>Fetching your pets and foods...</span>
-              </Col>
-            </Row>
-          )}
-          {apiFetchState === -1 && (
-            <Row>
-              <Col>
-                <p>
-                  No user information was found for your credentials. Click
-                  below to log in again.
-                </p>
-                <p>
-                  Note: Your user id and API key are different from your
-                  username and password. Make sure you enter your user id and
-                  API key.
-                </p>
-              </Col>
-            </Row>
-          )}
+          {apiFetchState === 1 && <PetFoodFeedFetching />}
+          {apiFetchState === -1 && <PetFoodFeedNoUser />}
           {apiFetchState === 2 && (
             <>
-              <LogoutControl />
-              <Row>
-                <Col>
-                  <p>
-                    Your API details were correct, but we couldn't figure out
-                    your pet feeds.
-                  </p>
-                  <p>You may have no food or pets which can be fed.</p>
-                  <p>
-                    Note: Pets which have already grown into mounts and pets
-                    which have not been hatched cannot be fed.
-                  </p>
-                </Col>
-              </Row>
+              <PetFoodFeedNoFeeds />
             </>
           )}
         </>
       )}
       {petFoodFeeds.length > 0 && apiFetchState === 2 && (
         <>
-          <LogoutControl />
-          <br />
           <PetFoodFeedInfo />
           <br />
           <Row className="align-items-top">
@@ -213,12 +179,9 @@ const PetFoodFeedContainer = (props) => {
             </Col>
           </Row>
 
-          <br />
-
           <Modal
             show={isFeedingPets || isFeedingPet}
             onHide={handleModelHide}
-            dialogClassName="modal-90w-80w"
             animation={false}
           >
             <Modal.Header closeButton>
