@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Container, Row, Col, Button, Modal } from "react-bootstrap";
+import { Container, Row, Col, Modal } from "react-bootstrap";
 import PetFoodFeedCarouselList from "../list/PetFoodFeedCarouselList";
 import PetFoodFeedSummary from "../summary/PetFoodFeedSummary";
 import PetFoodFeedProgressBar from "../progressBar/PetFoodFeedProgressBar";
@@ -32,6 +32,7 @@ import {
   setFeedingPets,
   setFeedingPet,
 } from "../../../slices/petFoodFeedSlice";
+import PetFoodFeedToggleButton from "../PetFoodFeedToggleButton";
 
 const PetFoodFeedContainer = (props) => {
   const dispatch = useDispatch();
@@ -118,18 +119,12 @@ const PetFoodFeedContainer = (props) => {
     dispatch,
   ]);
 
-  const handleModelHide = () => {
-    dispatch(setFeedingPets(false));
-  };
-
-  const handleTogglePetFoodFeedingClicked = (event) => {
-    event.preventDefault();
+  const startFeedingPets = () => {
     dispatch(setFeedingPets(true));
   };
 
-  const getTogglePetFoodFeedingButtonText = () => {
-    if (!isFeedingPets && isFeedingPet) return "Waiting...";
-    return isFeedingPets ? "Pause Feeding" : "Start Feeding";
+  const stopFeedingPets = () => {
+    dispatch(setFeedingPets(false));
   };
 
   return (
@@ -138,11 +133,7 @@ const PetFoodFeedContainer = (props) => {
         <>
           {apiFetchState === 1 && <PetFoodFeedFetching />}
           {apiFetchState === -1 && <PetFoodFeedNoUser />}
-          {apiFetchState === 2 && (
-            <>
-              <PetFoodFeedNoFeeds />
-            </>
-          )}
+          {apiFetchState === 2 && <PetFoodFeedNoFeeds />}
         </>
       )}
       {petFoodFeeds.length > 0 && apiFetchState === 2 && (
@@ -151,7 +142,7 @@ const PetFoodFeedContainer = (props) => {
           <br />
           <Row className="align-items-top">
             <Col>
-              <h3>Status</h3>
+              <h3>Pet Feeds</h3>
             </Col>
           </Row>
           <Row>
@@ -169,26 +160,27 @@ const PetFoodFeedContainer = (props) => {
           <br />
           <Row>
             <Col>
-              <Button
-                variant="primary"
-                onClick={handleTogglePetFoodFeedingClicked}
-                disabled={!isFeedingPets && isFeedingPet}
-              >
-                {getTogglePetFoodFeedingButtonText()}
-              </Button>
+              <PetFoodFeedToggleButton
+                isResumable={true}
+                onButtonClicked={startFeedingPets}
+              />
             </Col>
           </Row>
 
           <Modal
             show={isFeedingPets || isFeedingPet}
-            onHide={handleModelHide}
+            onHide={stopFeedingPets}
             animation={false}
+            backdrop="static"
+            centered
+            size="xl"
           >
             <Modal.Header closeButton>
-              <Modal.Title>Pet Food Feeder</Modal.Title>
+              <Modal.Title>Currently Feeding...</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Container>
+                <br />
                 <Row>
                   <Col>
                     <PetFoodFeedCarouselList
@@ -198,12 +190,22 @@ const PetFoodFeedContainer = (props) => {
                   </Col>
                 </Row>
                 <br />
+                <Row>
+                  <Col>
+                    <PetFoodFeedProgressBar
+                      value={petFoodFeedIndex}
+                      max={petFoodFeeds.length}
+                    />
+                  </Col>
+                </Row>
+                <br />
               </Container>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={handleModelHide}>
-                Stop
-              </Button>
+              <PetFoodFeedToggleButton
+                isResumable={true}
+                onButtonClicked={stopFeedingPets}
+              />
             </Modal.Footer>
           </Modal>
         </>
