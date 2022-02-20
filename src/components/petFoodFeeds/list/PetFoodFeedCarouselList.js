@@ -14,6 +14,15 @@ const PetFoodFeedCarouselList = (props) => {
             {props.petFoodFeeds.map((petFoodFeed) =>
               PetFoodFeedCarouselListItem(petFoodFeed)
             )}
+            <Carousel.Item>
+              <Row>
+                <Col>
+                  <h3 style={{ textAlign: "center" }}>
+                    All pets have been fed!
+                  </h3>
+                </Col>
+              </Row>
+            </Carousel.Item>
           </Carousel>
         </Col>
       </Row>

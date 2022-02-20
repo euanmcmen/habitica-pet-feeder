@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Container, Row, Col, Modal } from "react-bootstrap";
-import PetFoodFeedCarouselList from "../list/PetFoodFeedCarouselList";
+import { Row, Col } from "react-bootstrap";
 import PetFoodFeedSummary from "../summary/PetFoodFeedSummary";
-import PetFoodFeedProgressBar from "../progressBar/PetFoodFeedProgressBar";
 import PetFoodFeedInfo from "../../info/PetFoodFeedInfo";
 import PetFoodFeedFetching from "../PetFoodFeedFetching";
 import PetFoodFeedNoUser from "../PetFoodFeedNoUser";
 import PetFoodFeedNoFeeds from "../PetFoodFeedNoFeeds";
+import PetFoodFeedToggleButton from "../PetFoodFeedToggleButton";
+import PetFoodFeedFeedingModel from "../PetFoodFeedFeedingModel";
 
 import {
   getUserPetFoodFeedsAsync,
@@ -31,8 +31,8 @@ import {
   setPetFedAtIndex,
   setFeedingPets,
   setFeedingPet,
+  setFeedingComplete,
 } from "../../../slices/petFoodFeedSlice";
-import PetFoodFeedToggleButton from "../PetFoodFeedToggleButton";
 
 const PetFoodFeedContainer = (props) => {
   const dispatch = useDispatch();
@@ -46,9 +46,16 @@ const PetFoodFeedContainer = (props) => {
 
   //Pet Food Feeds
   const petFoodFeeds = useSelector((state) => state.petFoodFeed.feeds);
+
   const petFoodFeedIndex = useSelector((state) => state.petFoodFeed.feedIndex);
+
   const isFeedingPets = useSelector((state) => state.petFoodFeed.isFeedingPets);
+
   const isFeedingPet = useSelector((state) => state.petFoodFeed.isFeedingPet);
+
+  const isFeedingComplete = useSelector(
+    (state) => state.petFoodFeed.isFeedingComplete
+  );
 
   //App States
   const [apiFetchState, setApiFetchState] = useState(0);
@@ -57,7 +64,11 @@ const PetFoodFeedContainer = (props) => {
   //1 - Fetch Initiated
   //2 - Fetch completed.
 
+  //
+  // FETCH PETS
+  //
   useEffect(() => {
+    console.log("Hello 1");
     if (apiFetchState === 0) {
       setApiFetchState(1);
       getUserPetFoodFeedsAsync(authToken)
@@ -75,6 +86,7 @@ const PetFoodFeedContainer = (props) => {
 
           dispatch(
             setSummary({
+              numberOfFeeds: res.body.petFoodFeeds.length,
               numberOfPetsToBeFed: getNumberOfPetsToBeFed(
                 res.body.petFoodFeeds
               ),
@@ -93,8 +105,16 @@ const PetFoodFeedContainer = (props) => {
     }
   }, [authToken, rateLimitInfo, apiFetchState, dispatch]);
 
+  //
+  // FEED PETS
+  //
   useEffect(() => {
-    if (isFeedingPets && !isFeedingPet) {
+    console.log("Hello 2");
+    if (
+      isFeedingPets &&
+      !isFeedingPet &&
+      petFoodFeedIndex < petFoodFeeds.length
+    ) {
       dispatch(setFeedingPet(true));
 
       feedPetFoodAsync(
@@ -119,12 +139,18 @@ const PetFoodFeedContainer = (props) => {
     dispatch,
   ]);
 
+  //
+  // SET FEEDS COMPLETE
+  //
+  useEffect(() => {
+    console.log("Hello 3");
+    if (petFoodFeedIndex === petFoodFeeds.length && !isFeedingComplete) {
+      dispatch(setFeedingComplete);
+    }
+  }, [petFoodFeeds, petFoodFeedIndex, isFeedingComplete, dispatch]);
+
   const startFeedingPets = () => {
     dispatch(setFeedingPets(true));
-  };
-
-  const stopFeedingPets = () => {
-    dispatch(setFeedingPets(false));
   };
 
   return (
@@ -152,13 +178,6 @@ const PetFoodFeedContainer = (props) => {
           </Row>
           <br />
           <Row>
-            <PetFoodFeedProgressBar
-              value={petFoodFeedIndex}
-              max={petFoodFeeds.length}
-            />
-          </Row>
-          <br />
-          <Row>
             <Col>
               <PetFoodFeedToggleButton
                 isResumable={true}
@@ -167,47 +186,7 @@ const PetFoodFeedContainer = (props) => {
             </Col>
           </Row>
 
-          <Modal
-            show={isFeedingPets || isFeedingPet}
-            onHide={stopFeedingPets}
-            animation={false}
-            backdrop="static"
-            centered
-            size="xl"
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Currently Feeding...</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Container>
-                <br />
-                <Row>
-                  <Col>
-                    <PetFoodFeedCarouselList
-                      petFoodFeedIndex={petFoodFeedIndex}
-                      petFoodFeeds={petFoodFeeds}
-                    />
-                  </Col>
-                </Row>
-                <br />
-                <Row>
-                  <Col>
-                    <PetFoodFeedProgressBar
-                      value={petFoodFeedIndex}
-                      max={petFoodFeeds.length}
-                    />
-                  </Col>
-                </Row>
-                <br />
-              </Container>
-            </Modal.Body>
-            <Modal.Footer>
-              <PetFoodFeedToggleButton
-                isResumable={true}
-                onButtonClicked={stopFeedingPets}
-              />
-            </Modal.Footer>
-          </Modal>
+          <PetFoodFeedFeedingModel />
         </>
       )}
     </>

@@ -1,6 +1,40 @@
 import { Col, Row, Image, Carousel } from "react-bootstrap";
 
 const PetFoodFeedCarouselListItem = (props) => {
+  const feedQuantityBreakpoint = 9;
+
+  const getFoodsArrayJsx = () => {
+    if (props.feedQuantity > feedQuantityBreakpoint) {
+      return (
+        <>
+          <span>
+            <Image
+              src={`https://habitica-assets.s3.amazonaws.com/mobileApp/images/Pet_Food_${props.foodFullName}.png`}
+              alt={props.foodFullName}
+              width={100}
+              height={100}
+            />
+          </span>
+          <span>x{props.feedQuantity}</span>
+        </>
+      );
+    } else {
+      return (
+        <span>
+          {[...Array(props.feedQuantity)].map((_, index) => (
+            <Image
+              key={index}
+              src={`https://habitica-assets.s3.amazonaws.com/mobileApp/images/Pet_Food_${props.foodFullName}.png`}
+              alt={props.foodFullName}
+              width={100}
+              height={100}
+            />
+          ))}
+        </span>
+      );
+    }
+  };
+
   return (
     <Carousel.Item key={props.petFullName + props.foodFullName}>
       <Row>
@@ -22,19 +56,7 @@ const PetFoodFeedCarouselListItem = (props) => {
           </Row>
         </Col>
         <Col>
-          <>
-            <span>
-              {[...Array(props.feedQuantity)].map((_, index) => (
-                <Image
-                  key={index}
-                  src={`https://habitica-assets.s3.amazonaws.com/mobileApp/images/Pet_Food_${props.foodFullName}.png`}
-                  alt={props.foodFullName}
-                  width={100}
-                  height={100}
-                />
-              ))}
-            </span>
-          </>
+          <>{getFoodsArrayJsx()}</>
         </Col>
       </Row>
     </Carousel.Item>

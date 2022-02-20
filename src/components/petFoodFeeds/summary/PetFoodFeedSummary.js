@@ -9,6 +9,10 @@ const PetFoodFeedSummary = () => {
     <>
       <ListGroup variant="flush">
         <ListGroup.Item>
+          <span>Number of feeds: </span>
+          <span>{summary.numberOfFeeds}</span>
+        </ListGroup.Item>
+        <ListGroup.Item>
           <span>Number of pets to be fed: </span>
           <span>{summary.numberOfPetsToBeFed}</span>
         </ListGroup.Item>

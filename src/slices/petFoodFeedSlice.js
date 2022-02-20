@@ -8,6 +8,7 @@ export const petFoodFeedSlice = createSlice({
     feedIndex: 0,
     isFeedingPets: false,
     isFeedingPet: false,
+    isFeedingComplete: false,
   },
 
   reducers: {
@@ -32,12 +33,17 @@ export const petFoodFeedSlice = createSlice({
       state.isFeedingPet = action.payload;
     },
 
+    setFeedingComplete: (state) => {
+      state.isFeedingComplete = true;
+    },
+
     clearPetFoodFeeds: (state) => {
       state.feeds = [];
       state.feedSummary = {};
       state.feedIndex = 0;
       state.isFeeding = false;
       state.isFeedingPet = false;
+      state.isFeedingComplete = false;
     },
   },
 });
@@ -48,6 +54,7 @@ export const {
   setSummary,
   setFeedingPets,
   setFeedingPet,
+  setFeedingComplete,
   clearPetFoodFeeds,
 } = petFoodFeedSlice.actions;
 
