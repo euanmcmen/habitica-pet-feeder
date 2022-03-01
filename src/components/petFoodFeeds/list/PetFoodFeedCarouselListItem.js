@@ -1,4 +1,4 @@
-import { Col, Row, Image, Carousel } from "react-bootstrap";
+import { Col, Row, Image, Carousel, Spinner } from "react-bootstrap";
 
 const PetFoodFeedCarouselListItem = (props) => {
   const feedQuantityBreakpoint = 9;
@@ -37,6 +37,7 @@ const PetFoodFeedCarouselListItem = (props) => {
 
   return (
     <Carousel.Item key={props.petFullName + props.foodFullName}>
+      <br />
       <Row>
         <Col>
           <h3>{props.petFullName}</h3>
@@ -59,6 +60,14 @@ const PetFoodFeedCarouselListItem = (props) => {
           <>{getFoodsArrayJsx()}</>
         </Col>
       </Row>
+      {!props.isFed && (
+        <Row className="justify-content-center">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </Row>
+      )}
+      <br />
     </Carousel.Item>
   );
 };
