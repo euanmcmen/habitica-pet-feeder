@@ -8,6 +8,16 @@ export const getNumberOfPetsToBeFed = (petFoodFeeds) => {
   return petFoodFeedNames.size;
 };
 
+export const getUniquePetsToBeFed = (petFoodFeeds) => {
+  const petFoodFeedNames = new Set();
+
+  for (const petFoodFeed of petFoodFeeds) {
+    petFoodFeedNames.add(petFoodFeed.petFullName);
+  }
+
+  return [...petFoodFeedNames];
+};
+
 export const getNumberOfPetsToBeFedFully = (petFoodFeeds) => {
   const petFoodFeedNames = new Set();
 

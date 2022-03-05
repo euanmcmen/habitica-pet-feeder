@@ -7,18 +7,12 @@ import PetFoodFeedFetching from "../PetFoodFeedFetching";
 import PetFoodFeedNoUser from "../PetFoodFeedNoUser";
 import PetFoodFeedNoFeeds from "../PetFoodFeedNoFeeds";
 import PetFoodFeedToggleButton from "../PetFoodFeedToggleButton";
-import PetFoodFeedFeedingModel from "../PetFoodFeedFeedingModel";
+import PetFoodFeedFeedingModel from "../model/PetFoodFeedFeedingModel";
 
 import {
   getUserPetFoodFeedsAsync,
   feedPetFoodAsync,
 } from "../../../client/apiClient";
-
-import {
-  getNumberOfPetsToBeFed,
-  getNumberOfPetsToBeFedFully,
-  getNumberOfFoodsToBeFed,
-} from "../../../logic/petFoodFeedSummaryFunctions";
 
 import {
   setUserNameAndRateLimitInfo,
@@ -27,14 +21,13 @@ import {
 
 import {
   setPetFoodFeeds,
-  setSummary,
   setPetFedAtIndex,
   setFeedingPets,
   setFeedingPet,
   setFeedingComplete,
 } from "../../../slices/petFoodFeedSlice";
 
-const PetFoodFeedContainer = (props) => {
+const PetFoodFeedContainer = () => {
   const dispatch = useDispatch();
 
   //API
@@ -68,7 +61,6 @@ const PetFoodFeedContainer = (props) => {
   // FETCH PETS
   //
   useEffect(() => {
-    console.log("Hello 1");
     if (apiFetchState === 0) {
       setApiFetchState(1);
       getUserPetFoodFeedsAsync(authToken)
@@ -83,21 +75,6 @@ const PetFoodFeedContainer = (props) => {
               rateLimitInfo: res.rateLimitInfo,
             })
           );
-
-          dispatch(
-            setSummary({
-              numberOfFeeds: res.body.petFoodFeeds.length,
-              numberOfPetsToBeFed: getNumberOfPetsToBeFed(
-                res.body.petFoodFeeds
-              ),
-              numberOfPetsToBeFedFully: getNumberOfPetsToBeFedFully(
-                res.body.petFoodFeeds
-              ),
-              numberOfFoodsToBeFed: getNumberOfFoodsToBeFed(
-                res.body.petFoodFeeds
-              ),
-            })
-          );
         })
         .catch((res) => {
           setApiFetchState(-1);
@@ -109,7 +86,6 @@ const PetFoodFeedContainer = (props) => {
   // FEED PETS
   //
   useEffect(() => {
-    console.log("Hello 2");
     if (
       isFeedingPets &&
       !isFeedingPet &&
@@ -143,7 +119,6 @@ const PetFoodFeedContainer = (props) => {
   // SET FEEDS COMPLETE
   //
   useEffect(() => {
-    console.log("Hello 3");
     if (petFoodFeedIndex === petFoodFeeds.length && !isFeedingComplete) {
       dispatch(setFeedingComplete);
     }

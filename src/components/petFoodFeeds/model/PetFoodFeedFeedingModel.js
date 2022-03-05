@@ -1,11 +1,11 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col, Modal, Alert } from "react-bootstrap";
-import PetFoodFeedCarouselList from "./list/PetFoodFeedCarouselList";
-import PetFoodFeedProgressBar from "./progressBar/PetFoodFeedProgressBar";
-import PetFoodFeedToggleButton from "./PetFoodFeedToggleButton";
+import PetFoodFeedCarouselList from "../list/PetFoodFeedCarouselList";
+import PetFoodFeedProgressBar from "../progressBar/PetFoodFeedProgressBar";
+import PetFoodFeedToggleButton from "../PetFoodFeedToggleButton";
 
-import { setFeedingPets } from "../../slices/petFoodFeedSlice";
+import { setFeedingPets } from "../../../slices/petFoodFeedSlice";
 
 const PetFoodFeedFeedingModel = () => {
   const dispatch = useDispatch();

@@ -1,5 +1,7 @@
 import { Col, Row, Image, Carousel, Spinner } from "react-bootstrap";
 
+import { getFriendlyName } from "../../../logic/petFoodFeedFunctions";
+
 const PetFoodFeedCarouselListItem = (props) => {
   const feedQuantityBreakpoint = 9;
 
@@ -40,7 +42,7 @@ const PetFoodFeedCarouselListItem = (props) => {
       <br />
       <Row>
         <Col>
-          <h3>{props.petFullName}</h3>
+          <h3>{getFriendlyName(props.petFullName)}</h3>
         </Col>
       </Row>
       <Row className="align-items-center">

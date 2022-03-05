@@ -1,4 +1,7 @@
-const { groupPetFoodFeedsByPetName } = require("./groupPetFoodFeedsByPetName");
+const {
+  groupPetFoodFeedsByPetName,
+  mapPetFoodFeedsToPetFullName,
+} = require("./petFoodFeedArrayFunctions");
 
 const testInput = [
   {
@@ -109,4 +112,10 @@ test("grouped output contains TigerCub-Base", () => {
 
 test("grouped output contains LionCub-White", () => {
   expect(groupPetFoodFeedsByPetName(testInput)).toContainEqual(expectedLionCub);
+});
+
+test("mapped friendly name output contains 'Base TigerCub'", () => {
+  expect(mapPetFoodFeedsToPetFullName(testInput)).toContainEqual(
+    "Base TigerCub"
+  );
 });
