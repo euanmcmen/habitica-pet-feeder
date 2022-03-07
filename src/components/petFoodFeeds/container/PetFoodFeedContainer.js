@@ -153,12 +153,10 @@ const PetFoodFeedContainer = () => {
           </Row>
           <br />
           <Row>
-            <Col>
-              <PetFoodFeedToggleButton
-                isResumable={true}
-                onButtonClicked={startFeedingPets}
-              />
-            </Col>
+            <PetFoodFeedToggleButton
+              isResumable={true}
+              onButtonClicked={startFeedingPets}
+            />
           </Row>
 
           <PetFoodFeedFeedingModel />

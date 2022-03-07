@@ -31,6 +31,7 @@ const PetFoodFeedToggleButton = (props) => {
         variant={getVariant()}
         onClick={props.onButtonClicked}
         disabled={isPausing()}
+        size="lg"
       >
         {getTogglePetFoodFeedingButtonTextResumable()}
       </Button>

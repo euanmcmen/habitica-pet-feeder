@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { ListGroup } from "react-bootstrap";
-import { getFriendlyName } from "../../../logic/petFoodFeedFunctions";
+import { Button, ListGroup, OverlayTrigger } from "react-bootstrap";
+import PetFoodFeedSummaryPopover from "./PetFoodFeedSummaryPopover";
 
 import {
   getNumberOfPetsToBeFedFully,
@@ -34,13 +34,15 @@ const PetFoodFeedSummary = () => {
           <ListGroup.Item>
             <span>Number of pets to be fed: </span>
             <span>{summary.petsToBeFed.length}</span>
-            <ListGroup variant="flush">
-              {summary.petsToBeFed.map((petFullName) => (
-                <ListGroup.Item key={petFullName}>
-                  <span>{getFriendlyName(petFullName)}</span>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
+            <OverlayTrigger
+              trigger="click"
+              placement="right"
+              overlay={<PetFoodFeedSummaryPopover summary={summary} />}
+            >
+              <Button variant="info" size="sm" className="float-end">
+                Expand
+              </Button>
+            </OverlayTrigger>
           </ListGroup.Item>
           <ListGroup.Item>
             <span>Number of pets to be fully fed: </span>
