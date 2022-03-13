@@ -9,6 +9,13 @@ const PetFoodFeedNoFeeds = () => {
       </Row>
       <br />
       <Row style={{ textAlign: "center" }}>
+        <p>
+          It appears all of your pets have been fully fed, and cannot be fed
+          further.
+        </p>
+      </Row>
+      <br />
+      <Row style={{ textAlign: "center" }}>
         <p>This web application has nothing more to offer for you.</p>
         <p>Thank you for checking it out!</p>
       </Row>

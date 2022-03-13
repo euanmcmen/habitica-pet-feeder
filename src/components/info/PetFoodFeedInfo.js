@@ -8,9 +8,13 @@ const PetFoodFeedInfo = () => {
         <p>Your pets can be fed! Perhaps even their favourite foods.</p>
         <p>
           Below is a summary of how many pets will be fed; how many pets will be
-          fed fully and become mounts; and how many units of food will be fed.
+          fed fully and become mounts; and how many units of food will be fed
+          across them.
         </p>
-        <p>A progress bar will fill gradually as pets are fed.</p>
+        <p>
+          You can view the list of pets which will be fed by clicking the Expand
+          button.
+        </p>
         <p>Press the Start Feeding button below to begin.</p>
       </Card.Body>
     </Card>

@@ -34,6 +34,12 @@ const PetFoodFeedFeedingModel = () => {
         <Container>
           <br />
           <Row>
+            <p>
+              Your pets are being fed! Please allow a few minutes for the
+              process to complete.
+            </p>
+          </Row>
+          <Row>
             <Col>
               <PetFoodFeedCarouselList
                 petFoodFeedIndex={petFoodFeedIndex}
@@ -59,6 +65,7 @@ const PetFoodFeedFeedingModel = () => {
       <Modal.Footer>
         <PetFoodFeedToggleButton
           isResumable={true}
+          size={"md"}
           onButtonClicked={stopFeedingPets}
         />
       </Modal.Footer>

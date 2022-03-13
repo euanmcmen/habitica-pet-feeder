@@ -9,7 +9,13 @@ const PetFoodFeedToggleButton = (props) => {
 
   const isPausing = () => !isFeedingPets && isFeedingPet;
 
+  const isPausable = () => !props.isResumable || isFeedingPets;
+
   const getVariant = () => (!isFeedingPets ? "primary" : "secondary");
+
+  const shouldHide = () =>
+    (props.hideOnPausing && isPausing()) ||
+    (props.hideOnPausable && isPausable());
 
   const PausingText = "Pausing...";
   const PauseText = "Pause";
@@ -20,7 +26,7 @@ const PetFoodFeedToggleButton = (props) => {
   const getTogglePetFoodFeedingButtonTextResumable = () => {
     if (isPausing()) return PausingText;
 
-    if (!props.isResumable || isFeedingPets) return PauseText;
+    if (isPausable()) return PauseText;
 
     return (petFoodFeedIndex > 0 ? ResumeText : StartText) + FeedingSuffixText;
   };
@@ -31,7 +37,8 @@ const PetFoodFeedToggleButton = (props) => {
         variant={getVariant()}
         onClick={props.onButtonClicked}
         disabled={isPausing()}
-        size="lg"
+        hidden={shouldHide()}
+        size={props.size}
       >
         {getTogglePetFoodFeedingButtonTextResumable()}
       </Button>

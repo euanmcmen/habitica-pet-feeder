@@ -35,7 +35,7 @@ export const petFoodFeedSlice = createSlice({
     clearPetFoodFeeds: (state) => {
       state.feeds = [];
       state.feedIndex = 0;
-      state.isFeeding = false;
+      state.isFeedingPets = false;
       state.isFeedingPet = false;
       state.isFeedingComplete = false;
     },
