@@ -19,10 +19,6 @@ const PetFoodFeedNoFeeds = () => {
         <p>This web application has nothing more to offer for you.</p>
         <p>Thank you for checking it out!</p>
       </Row>
-      <br />
-      <Row style={{ textAlign: "center", fontStyle: "italic" }}>
-        <p>If you think this is incorrect, please contact me.</p>
-      </Row>
     </>
   );
 };

@@ -1,4 +1,7 @@
-export const getFriendlyName = (petFullName) => {
-  const petFullNameSplits = petFullName.split("-");
-  return `${petFullNameSplits[1]} ${petFullNameSplits[0]}`;
+export const getFriendlyName = (fullName) => {
+  const fullNameSplits = fullName.split(/[-_]/);
+
+  if (fullNameSplits.length === 1) return fullName;
+
+  return `${fullNameSplits[1]} ${fullNameSplits[0]}`;
 };

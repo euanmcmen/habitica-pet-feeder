@@ -17,9 +17,6 @@ const PetFoodFeedNoUser = () => {
         </p>
         <p>Please log out and try again.</p>
       </Row>
-      <Row style={{ textAlign: "center", fontStyle: "italic" }}>
-        <p>If you think this is incorrect, please contact me.</p>
-      </Row>
     </>
   );
 };

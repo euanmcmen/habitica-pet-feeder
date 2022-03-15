@@ -37,10 +37,13 @@ const PetFoodFeedSummary = () => {
             <OverlayTrigger
               trigger="click"
               placement="right"
-              overlay={<PetFoodFeedSummaryPopover summary={summary} />}
+              rootClose
+              overlay={
+                <PetFoodFeedSummaryPopover petsToBeFed={summary.petsToBeFed} />
+              }
             >
               <Button variant="info" size="sm" className="float-end">
-                Expand
+                Show Pets
               </Button>
             </OverlayTrigger>
           </ListGroup.Item>
