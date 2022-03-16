@@ -2,9 +2,8 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Container } from "react-bootstrap";
 import { AppNavBar } from "./components/common/AppNavBar";
-import LoginContainer from "./components/login/container/LoginContainer";
 import LogoutContainer from "./components/logout/container/LogoutContainer";
-import PetFoodFeedContainer from "./components/petFoodFeeds/container/PetFoodFeedContainer";
+import FetchUserPetsContainer from "./components/fetch/container/FetchUserPetsContainer";
 
 function App() {
   const authToken = useSelector((state) => state.apiConnection.authToken);
@@ -24,7 +23,7 @@ function App() {
       )}
 
       <Container>
-        {authToken === "" ? <LoginContainer /> : <PetFoodFeedContainer />}
+        <FetchUserPetsContainer />
       </Container>
     </>
   );

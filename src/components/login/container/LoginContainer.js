@@ -1,32 +1,16 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
 import { Row, Col } from "react-bootstrap";
-import { getAuthorizationTokenAsync } from "../../../client/apiClient";
-import { setAuthToken } from "../../../slices/apiConnectionSlice";
 import LoginForm from "../LoginForm";
 import LoginInfo from "../../info/LoginInfo";
 
 const LoginContainer = (props) => {
-  const dispatch = useDispatch();
-
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-
   const handleLoginSubmit = (userId, apiKey) => {
-    setIsLoggingIn(true);
-
     const authUser = {
       apiUserId: userId,
       apiUserKey: apiKey,
     };
 
-    getAuthorizationTokenAsync(authUser)
-      .then((token) => {
-        setIsLoggingIn(false);
-        dispatch(setAuthToken(token));
-      })
-      .catch((error) => {
-        setIsLoggingIn(false);
-      });
+    props.onLoginSubmitSuccess(authUser);
   };
 
   return (
@@ -37,17 +21,10 @@ const LoginContainer = (props) => {
         <Col>
           <LoginForm
             onLoginSubmit={handleLoginSubmit}
-            shouldDisableForm={isLoggingIn}
+            shouldDisableForm={props.shouldDisableForm}
           />
         </Col>
       </Row>
-      {isLoggingIn && (
-        <Row>
-          <Col>
-            <span>Logging in...</span>
-          </Col>
-        </Row>
-      )}
     </>
   );
 };

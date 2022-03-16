@@ -33,11 +33,6 @@ const PetFoodFeedFeedingContainer = () => {
   const isFeedingPets = useSelector((state) => state.petFoodFeed.isFeedingPets);
   const isFeedingPet = useSelector((state) => state.petFoodFeed.isFeedingPet);
 
-  //Feeding complete.
-  const isFeedingComplete = useSelector(
-    (state) => state.petFoodFeed.isFeedingComplete
-  );
-
   //
   // FEED PETS
   //
@@ -59,6 +54,10 @@ const PetFoodFeedFeedingContainer = () => {
         dispatch(setPetFedAtIndex(petFoodFeedIndex));
 
         dispatch(setFeedingPet(false));
+
+        if (petFoodFeedIndex === petFoodFeeds.length) {
+          dispatch(setFeedingComplete());
+        }
       });
     }
   }, [
@@ -70,15 +69,6 @@ const PetFoodFeedFeedingContainer = () => {
     petFoodFeedIndex,
     dispatch,
   ]);
-
-  //
-  // SET FEEDS COMPLETE
-  //
-  useEffect(() => {
-    if (petFoodFeedIndex === petFoodFeeds.length && !isFeedingComplete) {
-      dispatch(setFeedingComplete());
-    }
-  }, [petFoodFeeds, petFoodFeedIndex, isFeedingComplete, dispatch]);
 
   const startFeedingPets = () => {
     dispatch(setFeedingPets(true));

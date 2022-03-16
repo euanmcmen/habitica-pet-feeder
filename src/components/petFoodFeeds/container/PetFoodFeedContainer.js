@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import PetFoodFeedFetchingContainer from "./PetFoodFeedFetchingContainer";
 import PetFoodFeedFeedingContainer from "./PetFoodFeedFeedingContainer";
 import PetFoodFeedFedContainer from "./PetFoodFeedFedContainer";
+import PetFoodFeedNoFeeds from "../PetFoodFeedNoFeeds";
 
 const PetFoodFeedContainer = () => {
   const petFoodFeeds = useSelector((state) => state.petFoodFeed.feeds);
@@ -13,7 +13,7 @@ const PetFoodFeedContainer = () => {
 
   return (
     <>
-      {petFoodFeeds.length === 0 && <PetFoodFeedFetchingContainer />}
+      {petFoodFeeds.length === 0 && <PetFoodFeedNoFeeds />}
       {petFoodFeeds.length > 0 && (
         <>
           {!isFeedingComplete && <PetFoodFeedFeedingContainer />}

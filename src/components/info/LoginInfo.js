@@ -1,12 +1,16 @@
 import { Card } from "react-bootstrap";
 
-const LoginInfo = () => {
+const FetchInfo = () => {
   return (
     <Card border="info">
       <Card.Title>Info</Card.Title>
       <Card.Body>
         <p>
-          Find your User Id and API Key on the Habitica website in the{" "}
+          This application uses your <strong>User ID</strong> and your{" "}
+          <strong>API Key</strong> to communicate with Habitica on your behalf.
+        </p>
+        <p>
+          Find this information on the Habitica website in the{" "}
           <a
             href="https://habitica.com/user/settings/api"
             target="_blank"
@@ -15,15 +19,15 @@ const LoginInfo = () => {
             Settings
           </a>{" "}
           page. Your API Key is not stored, and is only used for this stage of
-          the app.
+          the application.
         </p>
         <p>
-          Enter your details and press the button below to start feeding your
-          pets!
+          Enter your User ID and API Key below, and press the button below to
+          start feeding your pets!
         </p>
       </Card.Body>
     </Card>
   );
 };
 
-export default LoginInfo;
+export default FetchInfo;
