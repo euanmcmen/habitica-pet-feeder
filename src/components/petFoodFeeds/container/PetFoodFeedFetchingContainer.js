@@ -33,22 +33,22 @@ const PetFoodFeedFetchingContainer = () => {
   useEffect(() => {
     if (apiFetchState === API_FETCH_NOT_STARTED) {
       setApiFetchState(API_FETCH_STARTED);
-      getUserPetFoodFeedsAsync(authToken)
-        .then((res) => {
-          setApiFetchState(API_FETCH_COMPLETE);
+      // getUserPetFoodFeedsAsync(authToken)
+      //   .then((res) => {
+      //     setApiFetchState(API_FETCH_COMPLETE);
 
-          dispatch(setPetFoodFeeds(res.body.petFoodFeeds));
+      //     dispatch(setPetFoodFeeds(res.body.petFoodFeeds));
 
-          dispatch(
-            setUserNameAndRateLimitInfo({
-              userName: res.body.userName,
-              rateLimitInfo: res.rateLimitInfo,
-            })
-          );
-        })
-        .catch((res) => {
-          setApiFetchState(API_FETCH_ERRORED);
-        });
+      //     dispatch(
+      //       setUserNameAndRateLimitInfo({
+      //         userName: res.body.userName,
+      //         rateLimitInfo: res.rateLimitInfo,
+      //       })
+      //     );
+      //   })
+      //   .catch((res) => {
+      //     setApiFetchState(API_FETCH_ERRORED);
+      //   });
     }
   }, [
     authToken,

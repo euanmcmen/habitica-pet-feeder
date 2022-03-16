@@ -6,13 +6,6 @@ import PetFoodFeedInfo from "../../info/PetFoodFeedInfo";
 import PetFoodFeedToggleButton from "../PetFoodFeedToggleButton";
 import PetFoodFeedFeedingModel from "../model/PetFoodFeedFeedingModel";
 
-//TODO - Move all of the "valid" display logic for pet food feeds here.
-//The other container -- perhaps rename to *FetchContainer -- should handle the initial API fetch, and display appropriate errors.
-//If the app fetches successfully, display this container.  This should assume a populated collection of pet food feeds.
-//Wire up dispatches and selectors etc...
-
-//TODO - I also want to add a "complete" component.
-
 import { feedPetFoodAsync } from "../../../client/apiClient";
 
 import { setRateLimitInfo } from "../../../slices/apiConnectionSlice";
