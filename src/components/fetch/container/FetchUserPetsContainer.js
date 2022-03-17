@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import LoginContainer from "../../login/container/LoginContainer";
 import PetFoodFeedContainer from "../../petFoodFeeds/container/PetFoodFeedContainer";
+import FetchError from "../FetchError";
 
 import {
   getAuthorizationTokenAsync,
@@ -14,7 +15,6 @@ import {
 } from "../../../slices/apiConnectionSlice";
 
 import { setPetFoodFeeds } from "../../../slices/petFoodFeedSlice";
-import FetchError from "../FetchError";
 
 const FetchUserPetsContainer = () => {
   const dispatch = useDispatch();
@@ -22,27 +22,26 @@ const FetchUserPetsContainer = () => {
   const authToken = useSelector((state) => state.apiConnection.authToken);
 
   const [isWaiting, setIsWaiting] = useState(false);
-  const [fetchErrored, setFetchErrored] = useState(false);
+  const [isErrored, setIsErrored] = useState(false);
 
   const handleLoginSubmitSuccessAsync = async (authUser) => {
     setIsWaiting(true);
-    setFetchErrored(false);
+    setIsErrored(false);
 
     try {
       var token = await getAuthorizationTokenAsync(authUser);
 
       var userPetFoodFeedsResponse = await getUserPetFoodFeedsAsync(token);
 
-      handleDispatches(token, userPetFoodFeedsResponse);
+      dispatchEvents(token, userPetFoodFeedsResponse);
     } catch {
-      console.log("caught");
-      setFetchErrored(true);
+      setIsErrored(true);
     } finally {
       setIsWaiting(false);
     }
   };
 
-  const handleDispatches = (token, userPetFoodFeedsResponse) => {
+  const dispatchEvents = (token, userPetFoodFeedsResponse) => {
     dispatch(setAuthToken(token));
 
     dispatch(setPetFoodFeeds(userPetFoodFeedsResponse.body.petFoodFeeds));
@@ -66,7 +65,7 @@ const FetchUserPetsContainer = () => {
         <PetFoodFeedContainer />
       )}
       <br />
-      {fetchErrored && (
+      {isErrored && (
         <>
           <FetchError />
         </>

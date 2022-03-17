@@ -8,6 +8,7 @@ const PetFoodFeedCarouselList = (props) => {
         <Col>
           <Carousel
             indicators={false}
+            controls={false}
             variant="dark"
             activeIndex={props.petFoodFeedIndex}
           >

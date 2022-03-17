@@ -15,14 +15,10 @@ const PetFoodFeedFeedingModel = () => {
   const isFeedingPets = useSelector((state) => state.petFoodFeed.isFeedingPets);
   const isFeedingPet = useSelector((state) => state.petFoodFeed.isFeedingPet);
 
-  const stopFeedingPets = () => {
-    dispatch(setFeedingPets(false));
-  };
-
   return (
     <Modal
       show={isFeedingPets || isFeedingPet}
-      onHide={stopFeedingPets}
+      onHide={() => dispatch(setFeedingPets(false))}
       animation={false}
       backdrop="static"
       dialogClassName="custom-model"
@@ -58,16 +54,12 @@ const PetFoodFeedFeedingModel = () => {
           </Row>
           <br />
           {!isFeedingPets && isFeedingPet && (
-            <Alert>Waiting for current feed to finish...</Alert>
+            <Alert>Waiting for this feed to finish...</Alert>
           )}
         </Container>
       </Modal.Body>
       <Modal.Footer>
-        <PetFoodFeedToggleButton
-          isResumable={true}
-          size={"md"}
-          onButtonClicked={stopFeedingPets}
-        />
+        <PetFoodFeedToggleButton isResumable={true} size={"md"} />
       </Modal.Footer>
     </Modal>
   );

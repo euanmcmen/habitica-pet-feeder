@@ -1,9 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Row, Alert, ListGroup } from "react-bootstrap";
-import { getFriendlyName } from "../../../logic/petFoodFeedFunctions";
+import { getFriendlyName } from "../../logic/petFoodFeedFunctions";
 
-const PetFoodFeedFedContainer = () => {
+const PetFoodFeedComplete = () => {
   const petFoodFeeds = useSelector((state) => state.petFoodFeed.feeds);
 
   const displayInFriendlyWay = (petFoodFeed) => {
@@ -32,15 +32,16 @@ const PetFoodFeedFedContainer = () => {
       <Row>
         <ListGroup variant="flush">
           {petFoodFeeds.map((petFoodFeed) => (
-            <ListGroup.Item key={petFoodFeed.petFullName}>
+            <ListGroup.Item
+              key={petFoodFeed.petFullName + petFoodFeed.foodFullName}
+            >
               <span>{displayInFriendlyWay(petFoodFeed)}</span>
             </ListGroup.Item>
           ))}
-          ;
         </ListGroup>
       </Row>
     </>
   );
 };
 
-export default PetFoodFeedFedContainer;
+export default PetFoodFeedComplete;

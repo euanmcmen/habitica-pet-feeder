@@ -1,37 +1,36 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Row, Col } from "react-bootstrap";
-import PetFoodFeedSummary from "../summary/PetFoodFeedSummary";
-import PetFoodFeedInfo from "../../info/PetFoodFeedInfo";
-import PetFoodFeedToggleButton from "../PetFoodFeedToggleButton";
-import PetFoodFeedFeedingModel from "../model/PetFoodFeedFeedingModel";
+import PetFoodFeedSummary from "./summary/PetFoodFeedSummary";
+import PetFoodFeedInfo from "../info/PetFoodFeedInfo";
+import PetFoodFeedToggleButton from "./PetFoodFeedToggleButton";
+import PetFoodFeedFeedingModel from "./model/PetFoodFeedFeedingModel";
 
-import { feedPetFoodAsync } from "../../../client/apiClient";
-
-import { setRateLimitInfo } from "../../../slices/apiConnectionSlice";
+import { feedPetFoodAsync } from "../../client/apiClient";
+import { setRateLimitInfo } from "../../slices/apiConnectionSlice";
 
 import {
   setPetFedAtIndex,
-  setFeedingPets,
   setFeedingPet,
   setFeedingComplete,
-} from "../../../slices/petFoodFeedSlice";
+} from "../../slices/petFoodFeedSlice";
 
-const PetFoodFeedFeedingContainer = () => {
+const PetFoodFeedFeeding = () => {
   const dispatch = useDispatch();
 
-  //API
   const authToken = useSelector((state) => state.apiConnection.authToken);
 
   const rateLimitInfo = useSelector(
     (state) => state.apiConnection.rateLimitInfo
   );
 
-  //Pet Food Feeds
   const petFoodFeeds = useSelector((state) => state.petFoodFeed.feeds);
   const petFoodFeedIndex = useSelector((state) => state.petFoodFeed.feedIndex);
   const isFeedingPets = useSelector((state) => state.petFoodFeed.isFeedingPets);
   const isFeedingPet = useSelector((state) => state.petFoodFeed.isFeedingPet);
+  const isFeedingComplete = useSelector(
+    (state) => state.petFoodFeed.isFeedingComplete
+  );
 
   //
   // FEED PETS
@@ -70,9 +69,14 @@ const PetFoodFeedFeedingContainer = () => {
     dispatch,
   ]);
 
-  const startFeedingPets = () => {
-    dispatch(setFeedingPets(true));
-  };
+  //
+  // SET FEEDS COMPLETE
+  //
+  useEffect(() => {
+    if (petFoodFeedIndex === petFoodFeeds.length && !isFeedingComplete) {
+      dispatch(setFeedingComplete());
+    }
+  }, [petFoodFeedIndex, petFoodFeeds.length, isFeedingComplete, dispatch]);
 
   return (
     <>
@@ -93,7 +97,6 @@ const PetFoodFeedFeedingContainer = () => {
         <PetFoodFeedToggleButton
           isResumable={true}
           size={"lg"}
-          onButtonClicked={startFeedingPets}
           hideOnPausing={true}
           hideOnPausable={true}
         />
@@ -104,4 +107,4 @@ const PetFoodFeedFeedingContainer = () => {
   );
 };
 
-export default PetFoodFeedFeedingContainer;
+export default PetFoodFeedFeeding;

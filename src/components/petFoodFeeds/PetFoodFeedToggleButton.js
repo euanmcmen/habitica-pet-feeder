@@ -1,8 +1,12 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Button } from "react-bootstrap";
 
+import { setFeedingPets } from "../../slices/petFoodFeedSlice";
+
 const PetFoodFeedToggleButton = (props) => {
+  const dispatch = useDispatch();
+
   const isFeedingPets = useSelector((state) => state.petFoodFeed.isFeedingPets);
   const isFeedingPet = useSelector((state) => state.petFoodFeed.isFeedingPet);
   const petFoodFeedIndex = useSelector((state) => state.petFoodFeed.feedIndex);
@@ -35,7 +39,7 @@ const PetFoodFeedToggleButton = (props) => {
     <>
       <Button
         variant={getVariant()}
-        onClick={props.onButtonClicked}
+        onClick={() => dispatch(setFeedingPets(!isFeedingPets))}
         disabled={isPausing()}
         hidden={shouldHide()}
         size={props.size}
