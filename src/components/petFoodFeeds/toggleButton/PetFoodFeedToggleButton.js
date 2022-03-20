@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "react-bootstrap";
 
-import { setFeedingPets } from "../../slices/petFoodFeedSlice";
+import { setFeedingPets } from "../../../slices/petFoodFeedSlice";
 
 const PetFoodFeedToggleButton = (props) => {
   const dispatch = useDispatch();

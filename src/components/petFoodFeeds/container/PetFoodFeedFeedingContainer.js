@@ -1,21 +1,21 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Row, Col } from "react-bootstrap";
-import PetFoodFeedSummary from "./summary/PetFoodFeedSummary";
-import PetFoodFeedInfo from "../info/PetFoodFeedInfo";
-import PetFoodFeedToggleButton from "./PetFoodFeedToggleButton";
-import PetFoodFeedFeedingModel from "./model/PetFoodFeedFeedingModel";
+import PetFoodFeedSummary from "../summary/PetFoodFeedSummary";
+import PetFoodFeedInfo from "../../info/PetFoodFeedInfo";
+import PetFoodFeedToggleButton from "../toggleButton/PetFoodFeedToggleButton";
+import PetFoodFeedFeedingModel from "../model/PetFoodFeedFeedingModel";
 
-import { feedPetFoodAsync } from "../../client/apiClient";
-import { setRateLimitInfo } from "../../slices/apiConnectionSlice";
+import { feedPetFoodAsync } from "../../../client/apiClient";
+import { setRateLimitInfo } from "../../../slices/apiConnectionSlice";
 
 import {
   setPetFedAtIndex,
   setFeedingPet,
   setFeedingComplete,
-} from "../../slices/petFoodFeedSlice";
+} from "../../../slices/petFoodFeedSlice";
 
-const PetFoodFeedFeeding = () => {
+const PetFoodFeedFeedingContainer = () => {
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.apiConnection.authToken);
@@ -107,4 +107,4 @@ const PetFoodFeedFeeding = () => {
   );
 };
 
-export default PetFoodFeedFeeding;
+export default PetFoodFeedFeedingContainer;

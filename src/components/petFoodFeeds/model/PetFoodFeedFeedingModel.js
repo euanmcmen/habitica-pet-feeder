@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col, Modal, Alert } from "react-bootstrap";
 import PetFoodFeedCarouselList from "../list/PetFoodFeedCarouselList";
 import PetFoodFeedProgressBar from "../progressBar/PetFoodFeedProgressBar";
-import PetFoodFeedToggleButton from "../PetFoodFeedToggleButton";
+import PetFoodFeedToggleButton from "../toggleButton/PetFoodFeedToggleButton";
 
 import { setFeedingPets } from "../../../slices/petFoodFeedSlice";
 
