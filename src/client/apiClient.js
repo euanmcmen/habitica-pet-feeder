@@ -1,3 +1,8 @@
+const throwUnsuccessfulResponseCode = (response) => {
+  if (response.status !== 200)
+    throw new Error(`Non-success status code: ${response.status}`);
+};
+
 export const getAuthorizationTokenAsync = async (authUser) => {
   var url = "https://habitica-pet-feeder-api.azurewebsites.net/api/Auth/token";
 
@@ -8,6 +13,8 @@ export const getAuthorizationTokenAsync = async (authUser) => {
   };
 
   var response = await fetch(url, requestOptions);
+
+  throwUnsuccessfulResponseCode(response);
 
   var responseTest = await response.text();
 
@@ -27,6 +34,8 @@ export const getUserPetFoodFeedsAsync = async (authToken) => {
   };
 
   var response = await fetch(url, requestOptions);
+
+  throwUnsuccessfulResponseCode(response);
 
   var responseData = await response.json();
 
@@ -53,6 +62,8 @@ export const feedPetFoodAsync = async (
   };
 
   var response = await fetch(url, requestOptions);
+
+  throwUnsuccessfulResponseCode(response);
 
   var responseData = await response.json();
 

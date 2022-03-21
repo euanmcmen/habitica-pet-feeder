@@ -11,8 +11,10 @@ import { setRateLimitInfo } from "../../../slices/apiConnectionSlice";
 
 import {
   setPetFedAtIndex,
-  setFeedingPet,
   setFeedingComplete,
+  setFeedingErrored,
+  stopFeedingPet,
+  startFeedingPet,
 } from "../../../slices/petFoodFeedSlice";
 
 const PetFoodFeedFeedingContainer = () => {
@@ -31,35 +33,37 @@ const PetFoodFeedFeedingContainer = () => {
   const isFeedingComplete = useSelector(
     (state) => state.petFoodFeed.isFeedingComplete
   );
+  const isFeedingErrored = useSelector(
+    (state) => state.petFoodFeed.isFeedingErrored
+  );
 
   //
   // FEED PETS
   //
   useEffect(() => {
     if (
+      !isFeedingErrored &&
       isFeedingPets &&
       !isFeedingPet &&
       petFoodFeedIndex < petFoodFeeds.length
     ) {
-      dispatch(setFeedingPet(true));
+      dispatch(startFeedingPet());
 
-      feedPetFoodAsync(
-        authToken,
-        rateLimitInfo,
-        petFoodFeeds[petFoodFeedIndex]
-      ).then((res) => {
-        dispatch(setRateLimitInfo(res.rateLimitInfo));
-
-        dispatch(setPetFedAtIndex(petFoodFeedIndex));
-
-        dispatch(setFeedingPet(false));
-
-        if (petFoodFeedIndex === petFoodFeeds.length) {
-          dispatch(setFeedingComplete());
-        }
-      });
+      feedPetFoodAsync(authToken, rateLimitInfo, petFoodFeeds[petFoodFeedIndex])
+        .then((res) => {
+          dispatch(setRateLimitInfo(res.rateLimitInfo));
+          dispatch(setPetFedAtIndex(petFoodFeedIndex));
+        })
+        .catch((err) => {
+          console.log(err);
+          dispatch(setFeedingErrored(true));
+        })
+        .finally(() => {
+          dispatch(stopFeedingPet());
+        });
     }
   }, [
+    isFeedingErrored,
     isFeedingPets,
     isFeedingPet,
     authToken,
@@ -74,7 +78,7 @@ const PetFoodFeedFeedingContainer = () => {
   //
   useEffect(() => {
     if (petFoodFeedIndex === petFoodFeeds.length && !isFeedingComplete) {
-      dispatch(setFeedingComplete());
+      dispatch(setFeedingComplete(true));
     }
   }, [petFoodFeedIndex, petFoodFeeds.length, isFeedingComplete, dispatch]);
 

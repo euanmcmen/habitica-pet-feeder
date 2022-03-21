@@ -2,7 +2,10 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "react-bootstrap";
 
-import { setFeedingPets } from "../../../slices/petFoodFeedSlice";
+import {
+  startFeedingPets,
+  stopFeedingPets,
+} from "../../../slices/petFoodFeedSlice";
 
 const PetFoodFeedToggleButton = (props) => {
   const dispatch = useDispatch();
@@ -35,11 +38,19 @@ const PetFoodFeedToggleButton = (props) => {
     return (petFoodFeedIndex > 0 ? ResumeText : StartText) + FeedingSuffixText;
   };
 
+  const handleButtonClick = () => {
+    if (isFeedingPets) {
+      dispatch(stopFeedingPets());
+    } else {
+      dispatch(startFeedingPets());
+    }
+  };
+
   return (
     <>
       <Button
         variant={getVariant()}
-        onClick={() => dispatch(setFeedingPets(!isFeedingPets))}
+        onClick={handleButtonClick}
         disabled={isPausing()}
         hidden={shouldHide()}
         size={props.size}
