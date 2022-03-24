@@ -1,6 +1,6 @@
 import React from "react";
 import { Row, Alert } from "react-bootstrap";
-import PetFoodFeedLog from "./feedLog/FeedLog";
+import FeedLog from "./feedLog/FeedLog";
 
 const FeedingComplete = () => {
   return (
@@ -19,7 +19,7 @@ const FeedingComplete = () => {
           Please see below for a breakdown of which pets were fed which foods.
         </p>
       </Row>
-      <PetFoodFeedLog includeFed={true} />
+      <FeedLog includeFed={true} />
     </>
   );
 };

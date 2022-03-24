@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Row, Col, ListGroup } from "react-bootstrap";
 import { getFriendlyName } from "../../../logic/petFoodFeedFunctions";
 
-const PetFoodFeedLog = (props) => {
+const FeedLog = (props) => {
   const petFoodFeeds = useSelector((state) => state.petFoodFeed.feeds);
 
   const displayInFriendlyWay = (petFoodFeed, isPastTense) => {
@@ -17,39 +17,43 @@ const PetFoodFeedLog = (props) => {
   };
 
   return (
-    <Row>
-      {props.includeNotFed && (
-        <Col>
-          <ListGroup variant="flush">
-            {petFoodFeeds
-              .filter((petFoodFeed) => !petFoodFeed.isFed)
-              .map((petFoodFeed) => (
-                <ListGroup.Item
-                  key={petFoodFeed.petFullName + petFoodFeed.foodFullName}
-                >
-                  <span>{displayInFriendlyWay(petFoodFeed, false)}</span>
-                </ListGroup.Item>
-              ))}
-          </ListGroup>
-        </Col>
-      )}
-      {props.includeFed && (
-        <Col>
-          <ListGroup variant="flush">
-            {petFoodFeeds
-              .filter((petFoodFeed) => petFoodFeed.isFed)
-              .map((petFoodFeed) => (
-                <ListGroup.Item
-                  key={petFoodFeed.petFullName + petFoodFeed.foodFullName}
-                >
-                  <span>{displayInFriendlyWay(petFoodFeed, true)}</span>
-                </ListGroup.Item>
-              ))}
-          </ListGroup>
-        </Col>
-      )}
-    </Row>
+    <>
+      <Row>
+        {props.includeNotFed && (
+          <Col>
+            <h3>Not Fed</h3>
+            <ListGroup variant="flush">
+              {petFoodFeeds
+                .filter((petFoodFeed) => !petFoodFeed.isFed)
+                .map((petFoodFeed) => (
+                  <ListGroup.Item
+                    key={petFoodFeed.petFullName + petFoodFeed.foodFullName}
+                  >
+                    <span>{displayInFriendlyWay(petFoodFeed, false)}</span>
+                  </ListGroup.Item>
+                ))}
+            </ListGroup>
+          </Col>
+        )}
+        {props.includeFed && (
+          <Col>
+            <h3>Fed</h3>
+            <ListGroup variant="flush">
+              {petFoodFeeds
+                .filter((petFoodFeed) => petFoodFeed.isFed)
+                .map((petFoodFeed) => (
+                  <ListGroup.Item
+                    key={petFoodFeed.petFullName + petFoodFeed.foodFullName}
+                  >
+                    <span>{displayInFriendlyWay(petFoodFeed, true)}</span>
+                  </ListGroup.Item>
+                ))}
+            </ListGroup>
+          </Col>
+        )}
+      </Row>
+    </>
   );
 };
 
-export default PetFoodFeedLog;
+export default FeedLog;

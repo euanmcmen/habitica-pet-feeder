@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Button, ListGroup, OverlayTrigger } from "react-bootstrap";
-import FeedSummaryPopover from "./FeedSummaryPopover";
+import { ListGroup } from "react-bootstrap";
+import SummaryPetsControl from "./petsPopover/SummaryPetsControl";
+import FeedLogOffCanvasControl from "./logPopup/SummaryFeedLogControl";
 
 import {
   getNumberOfPetsToBeFedFully,
@@ -30,20 +31,12 @@ const FeedSummary = () => {
           <ListGroup.Item>
             <span>Number of feeds: </span>
             <span>{summary.numberOfFeeds}</span>
+            <FeedLogOffCanvasControl />
           </ListGroup.Item>
           <ListGroup.Item>
             <span>Number of pets to be fed: </span>
             <span>{summary.petsToBeFed.length}</span>
-            <OverlayTrigger
-              trigger="click"
-              placement="right"
-              rootClose
-              overlay={<FeedSummaryPopover petsToBeFed={summary.petsToBeFed} />}
-            >
-              <Button variant="info" size="sm" className="float-end">
-                Show Pets
-              </Button>
-            </OverlayTrigger>
+            <SummaryPetsControl petsToBeFed={summary.petsToBeFed} />
           </ListGroup.Item>
           <ListGroup.Item>
             <span>Number of pets to be fully fed: </span>
