@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import LoginContainer from "../../login/container/LoginContainer";
-import PetFoodFeedContainer from "../../petFoodFeeds/container/PetFoodFeedContainer";
+import PetFoodFeedContainer from "../../feed/container/PetFoodFeedContainer";
 import FetchError from "../FetchError";
 
 import {

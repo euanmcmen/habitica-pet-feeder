@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Container, Row, Col, Modal, Alert } from "react-bootstrap";
-import PetFoodFeedCarouselList from "../list/PetFoodFeedCarouselList";
+import PetFoodFeedCarouselList from "../carousel/PetFoodFeedCarouselList";
 import PetFoodFeedProgressBar from "../progressBar/PetFoodFeedProgressBar";
 import PetFoodFeedToggleButton from "../toggleButton/PetFoodFeedToggleButton";
 import PetFoodFeedFeedingModelInfo from "./PetFoodFeedFeedingModelInfo";
@@ -24,7 +24,7 @@ const PetFoodFeedFeedingModel = () => {
       dialogClassName="custom-model"
     >
       <Modal.Header>
-        <Modal.Title>Currently Feeding...</Modal.Title>
+        <Modal.Title>Pet Food Feeder</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Container>
