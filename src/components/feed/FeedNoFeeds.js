@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Alert } from "react-bootstrap";
 
-const PetFoodFeedNoFeeds = () => {
+const FeedNoFeeds = () => {
   return (
     <>
       <Row>
@@ -16,4 +16,4 @@ const PetFoodFeedNoFeeds = () => {
   );
 };
 
-export default PetFoodFeedNoFeeds;
+export default FeedNoFeeds;

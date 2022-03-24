@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Button, ListGroup, OverlayTrigger } from "react-bootstrap";
-import PetFoodFeedSummaryPopover from "./PetFoodFeedSummaryPopover";
+import FeedSummaryPopover from "./FeedSummaryPopover";
 
 import {
   getNumberOfPetsToBeFedFully,
@@ -9,7 +9,7 @@ import {
   getUniquePetsToBeFed,
 } from "../../../logic/petFoodFeedSummaryFunctions";
 
-const PetFoodFeedSummary = () => {
+const FeedSummary = () => {
   const [summary, setSummary] = useState(null);
 
   const petFoodFeeds = useSelector((state) => state.petFoodFeed.feeds);
@@ -38,9 +38,7 @@ const PetFoodFeedSummary = () => {
               trigger="click"
               placement="right"
               rootClose
-              overlay={
-                <PetFoodFeedSummaryPopover petsToBeFed={summary.petsToBeFed} />
-              }
+              overlay={<FeedSummaryPopover petsToBeFed={summary.petsToBeFed} />}
             >
               <Button variant="info" size="sm" className="float-end">
                 Show Pets
@@ -61,4 +59,4 @@ const PetFoodFeedSummary = () => {
   );
 };
 
-export default PetFoodFeedSummary;
+export default FeedSummary;

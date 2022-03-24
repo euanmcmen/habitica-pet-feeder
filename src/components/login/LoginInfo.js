@@ -1,6 +1,6 @@
 import { Card } from "react-bootstrap";
 
-const FetchInfo = () => {
+const LoginInfo = () => {
   return (
     <Card border="info">
       <Card.Title>Info</Card.Title>
@@ -30,4 +30,4 @@ const FetchInfo = () => {
   );
 };
 
-export default FetchInfo;
+export default LoginInfo;

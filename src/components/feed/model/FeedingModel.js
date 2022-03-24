@@ -1,13 +1,13 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Container, Row, Col, Modal, Alert } from "react-bootstrap";
-import PetFoodFeedCarouselList from "../carousel/PetFoodFeedCarouselList";
-import PetFoodFeedProgressBar from "../progressBar/PetFoodFeedProgressBar";
-import PetFoodFeedToggleButton from "../toggleButton/PetFoodFeedToggleButton";
-import PetFoodFeedFeedingModelInfo from "./PetFoodFeedFeedingModelInfo";
-import PetFoodFeedFeedingModelError from "./PetFoodFeedFeedingModelError";
+import FeedCarouselList from "../carousel/FeedCarouselList";
+import FeedProgressBar from "../progressBar/FeedProgressBar";
+import FeedToggleButton from "../toggleButton/FeedToggleButton";
+import FeedingModelInfo from "./FeedingModelInfo";
+import FeedingModelError from "./FeedingModelError";
 
-const PetFoodFeedFeedingModel = () => {
+const FeedingModel = () => {
   const petFoodFeeds = useSelector((state) => state.petFoodFeed.feeds);
   const petFoodFeedIndex = useSelector((state) => state.petFoodFeed.feedIndex);
   const isFeedingPets = useSelector((state) => state.petFoodFeed.isFeedingPets);
@@ -30,15 +30,11 @@ const PetFoodFeedFeedingModel = () => {
         <Container>
           <br />
           <Row>
-            {!isFeedingErrored ? (
-              <PetFoodFeedFeedingModelInfo />
-            ) : (
-              <PetFoodFeedFeedingModelError />
-            )}
+            {!isFeedingErrored ? <FeedingModelInfo /> : <FeedingModelError />}
           </Row>
           <Row>
             <Col>
-              <PetFoodFeedCarouselList
+              <FeedCarouselList
                 petFoodFeedIndex={petFoodFeedIndex}
                 petFoodFeeds={petFoodFeeds}
               />
@@ -47,7 +43,7 @@ const PetFoodFeedFeedingModel = () => {
           <br />
           <Row>
             <Col>
-              <PetFoodFeedProgressBar
+              <FeedProgressBar
                 value={petFoodFeedIndex}
                 max={petFoodFeeds.length}
               />
@@ -60,10 +56,10 @@ const PetFoodFeedFeedingModel = () => {
         </Container>
       </Modal.Body>
       <Modal.Footer>
-        <PetFoodFeedToggleButton isResumable={true} size={"md"} />
+        <FeedToggleButton isResumable={true} size={"md"} />
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default PetFoodFeedFeedingModel;
+export default FeedingModel;

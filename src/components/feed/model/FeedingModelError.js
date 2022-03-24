@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Alert } from "react-bootstrap";
 
-const PetFoodFeedFeedingModelError = () => {
+const FeedingModelError = () => {
   return (
     <Row>
       <Alert variant="danger">An error occurred while feeding your pets.</Alert>
@@ -11,4 +11,4 @@ const PetFoodFeedFeedingModelError = () => {
   );
 };
 
-export default PetFoodFeedFeedingModelError;
+export default FeedingModelError;

@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Row, Col } from "react-bootstrap";
-import PetFoodFeedSummary from "../summary/PetFoodFeedSummary";
-import PetFoodFeedInfo from "../../info/PetFoodFeedInfo";
-import PetFoodFeedToggleButton from "../toggleButton/PetFoodFeedToggleButton";
-import PetFoodFeedFeedingModel from "../model/PetFoodFeedFeedingModel";
+import FeedSummary from "../summary/FeedSummary";
+import FeedInfo from "../FeedInfo";
+import FeedToggleButton from "../toggleButton/FeedToggleButton";
+import FeedingModel from "../model/FeedingModel";
 
 import { feedPetFoodAsync } from "../../../client/apiClient";
 import { setRateLimitInfo } from "../../../slices/apiConnectionSlice";
@@ -17,7 +17,7 @@ import {
   startFeedingPet,
 } from "../../../slices/petFoodFeedSlice";
 
-const PetFoodFeedFeedingContainer = () => {
+const FeedingContainer = () => {
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.apiConnection.authToken);
@@ -84,7 +84,7 @@ const PetFoodFeedFeedingContainer = () => {
 
   return (
     <>
-      <PetFoodFeedInfo />
+      <FeedInfo />
       <br />
       <Row className="align-items-top">
         <Col>
@@ -93,12 +93,12 @@ const PetFoodFeedFeedingContainer = () => {
       </Row>
       <Row>
         <Col>
-          <PetFoodFeedSummary />
+          <FeedSummary />
         </Col>
       </Row>
       <br />
       <Row>
-        <PetFoodFeedToggleButton
+        <FeedToggleButton
           isResumable={true}
           size={"lg"}
           hideOnPausing={true}
@@ -106,9 +106,9 @@ const PetFoodFeedFeedingContainer = () => {
         />
       </Row>
 
-      <PetFoodFeedFeedingModel />
+      <FeedingModel />
     </>
   );
 };
 
-export default PetFoodFeedFeedingContainer;
+export default FeedingContainer;

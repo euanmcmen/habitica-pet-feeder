@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Alert } from "react-bootstrap";
 
-const PetFoodFeedFeedingModelInfo = () => {
+const FeedingModelInfo = () => {
   return (
     <Row>
       <Alert variant="info">Your pets are being fed!</Alert>
@@ -14,4 +14,4 @@ const PetFoodFeedFeedingModelInfo = () => {
   );
 };
 
-export default PetFoodFeedFeedingModelInfo;
+export default FeedingModelInfo;

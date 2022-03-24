@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import LoginContainer from "../../login/container/LoginContainer";
-import PetFoodFeedContainer from "../../feed/container/PetFoodFeedContainer";
+import FeedUserPetsContainer from "../../feed/container/FeedUserPetsContainer";
 import FetchError from "../FetchError";
 
 import {
@@ -62,7 +62,7 @@ const FetchUserPetsContainer = () => {
           shouldDisableForm={isWaiting}
         />
       ) : (
-        <PetFoodFeedContainer />
+        <FeedUserPetsContainer />
       )}
       <br />
       {isErrored && (

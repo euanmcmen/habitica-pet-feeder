@@ -7,7 +7,7 @@ import {
   stopFeedingPets,
 } from "../../../slices/petFoodFeedSlice";
 
-const PetFoodFeedToggleButton = (props) => {
+const FeedToggleButton = (props) => {
   const dispatch = useDispatch();
 
   const isFeedingPets = useSelector((state) => state.petFoodFeed.isFeedingPets);
@@ -61,4 +61,4 @@ const PetFoodFeedToggleButton = (props) => {
   );
 };
 
-export default PetFoodFeedToggleButton;
+export default FeedToggleButton;

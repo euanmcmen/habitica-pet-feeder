@@ -2,7 +2,7 @@ import { Col, Row, Image, Carousel, Spinner } from "react-bootstrap";
 
 import { getFriendlyName } from "../../../logic/petFoodFeedFunctions";
 
-const PetFoodFeedCarouselListItem = (props) => {
+const FeedCarouselListItem = (props) => {
   const feedQuantityBreakpoint = 9;
 
   const getFoodsArrayJsx = () => {
@@ -74,4 +74,4 @@ const PetFoodFeedCarouselListItem = (props) => {
   );
 };
 
-export default PetFoodFeedCarouselListItem;
+export default FeedCarouselListItem;

@@ -1,7 +1,7 @@
 import { Col, Row, Carousel } from "react-bootstrap";
-import PetFoodFeedCarouselListItem from "./PetFoodFeedCarouselListItem";
+import FeedCarouselListItem from "./FeedCarouselListItem";
 
-const PetFoodFeedCarouselList = (props) => {
+const FeedCarouselList = (props) => {
   return (
     <>
       <Row>
@@ -13,7 +13,7 @@ const PetFoodFeedCarouselList = (props) => {
             activeIndex={props.petFoodFeedIndex}
           >
             {props.petFoodFeeds.map((petFoodFeed) =>
-              PetFoodFeedCarouselListItem(petFoodFeed)
+              FeedCarouselListItem(petFoodFeed)
             )}
             <Carousel.Item>
               <Row>
@@ -31,4 +31,4 @@ const PetFoodFeedCarouselList = (props) => {
   );
 };
 
-export default PetFoodFeedCarouselList;
+export default FeedCarouselList;

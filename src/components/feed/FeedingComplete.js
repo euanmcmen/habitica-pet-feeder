@@ -1,8 +1,8 @@
 import React from "react";
 import { Row, Alert } from "react-bootstrap";
-import PetFoodFeedLog from "./feedLog/PetFoodFeedLog";
+import PetFoodFeedLog from "./feedLog/FeedLog";
 
-const PetFoodFeedComplete = () => {
+const FeedingComplete = () => {
   return (
     <>
       <Row>
@@ -24,4 +24,4 @@ const PetFoodFeedComplete = () => {
   );
 };
 
-export default PetFoodFeedComplete;
+export default FeedingComplete;

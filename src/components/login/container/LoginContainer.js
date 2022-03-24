@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
 import LoginForm from "../LoginForm";
-import LoginInfo from "../../info/LoginInfo";
+import LoginInfo from "../LoginInfo";
 
 const LoginContainer = (props) => {
   const handleLoginSubmit = (userId, apiKey) => {

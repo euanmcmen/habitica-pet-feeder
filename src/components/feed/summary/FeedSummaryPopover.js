@@ -2,7 +2,7 @@ import React from "react";
 import { ListGroup, Popover } from "react-bootstrap";
 import { getFriendlyName } from "../../../logic/petFoodFeedFunctions";
 
-const PetFoodFeedSummaryPopover = React.forwardRef(
+const FeedSummaryPopover = React.forwardRef(
   ({ petsToBeFed, ...props }, ref) => {
     return (
       <Popover ref={ref} body {...props}>
@@ -22,4 +22,4 @@ const PetFoodFeedSummaryPopover = React.forwardRef(
   }
 );
 
-export default PetFoodFeedSummaryPopover;
+export default FeedSummaryPopover;
