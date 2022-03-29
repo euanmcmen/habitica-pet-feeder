@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ListGroup } from "react-bootstrap";
-import SummaryPetsControl from "./petsPopover/SummaryPetsControl";
-import FeedLogOffCanvasControl from "./logPopup/SummaryFeedLogControl";
+import OffCanvasControl from "./OffCanvasControl";
+import PetNamesList from "./PetNamesList";
+import FeedLog from "../feedLog/FeedLog";
 
 import {
   getNumberOfPetsToBeFedFully,
@@ -31,12 +32,16 @@ const FeedSummary = () => {
           <ListGroup.Item>
             <span>Number of feeds: </span>
             <span>{summary.numberOfFeeds}</span>
-            <FeedLogOffCanvasControl />
+            <OffCanvasControl placement="bottom" title="Feed Log">
+              <FeedLog includeNotFed={true} includeFed={true} />
+            </OffCanvasControl>
           </ListGroup.Item>
           <ListGroup.Item>
             <span>Number of pets to be fed: </span>
             <span>{summary.petsToBeFed.length}</span>
-            <SummaryPetsControl petsToBeFed={summary.petsToBeFed} />
+            <OffCanvasControl placement="end" title="Pets">
+              <PetNamesList petsToBeFed={summary.petsToBeFed} />
+            </OffCanvasControl>
           </ListGroup.Item>
           <ListGroup.Item>
             <span>Number of pets to be fully fed: </span>

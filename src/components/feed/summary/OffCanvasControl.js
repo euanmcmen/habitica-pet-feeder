@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Offcanvas, Button } from "react-bootstrap";
-import FeedLog from "../../feedLog/FeedLog";
 
-const FeedLogOffCanvasControl = () => {
+const OffCanvasControl = (props) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -15,18 +14,16 @@ const FeedLogOffCanvasControl = () => {
         size="sm"
         className="float-end"
       >
-        Show Feed Log
+        {props.title}
       </Button>
-      <Offcanvas show={show} onHide={handleClose} placement="bottom">
+      <Offcanvas show={show} onHide={handleClose} placement={props.placement}>
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Feed Log</Offcanvas.Title>
+          <Offcanvas.Title>{props.title}</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body>
-          <FeedLog includeNotFed={true} includeFed={true} />
-        </Offcanvas.Body>
+        <Offcanvas.Body>{props.children}</Offcanvas.Body>
       </Offcanvas>
     </>
   );
 };
 
-export default FeedLogOffCanvasControl;
+export default OffCanvasControl;

@@ -12,8 +12,8 @@ const FeedInfo = () => {
           across them.
         </p>
         <p>
-          You can view the list of pets which will be fed by clicking the Expand
-          button.
+          You can view some extra information using the buttons to the right of
+          the summary.
         </p>
         <p>Press the Start Feeding button below to begin.</p>
       </Card.Body>
