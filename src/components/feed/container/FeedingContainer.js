@@ -12,10 +12,11 @@ import { setRateLimitInfo } from "../../../slices/apiConnectionSlice";
 import {
   setPetFedAtIndex,
   setFeedingComplete,
-  setFeedingErrored,
   stopFeedingPet,
   startFeedingPet,
 } from "../../../slices/petFoodFeedSlice";
+
+import { setHasFatalApiError } from "../../../slices/apiConnectionSlice";
 
 const FeedingContainer = () => {
   const dispatch = useDispatch();
@@ -33,16 +34,12 @@ const FeedingContainer = () => {
   const isFeedingComplete = useSelector(
     (state) => state.petFoodFeed.isFeedingComplete
   );
-  const isFeedingErrored = useSelector(
-    (state) => state.petFoodFeed.isFeedingErrored
-  );
 
   //
   // FEED PETS
   //
   useEffect(() => {
     if (
-      !isFeedingErrored &&
       isFeedingPets &&
       !isFeedingPet &&
       petFoodFeedIndex < petFoodFeeds.length
@@ -53,17 +50,13 @@ const FeedingContainer = () => {
         .then((res) => {
           dispatch(setRateLimitInfo(res.rateLimitInfo));
           dispatch(setPetFedAtIndex(petFoodFeedIndex));
-        })
-        .catch((err) => {
-          console.log(err);
-          dispatch(setFeedingErrored(true));
-        })
-        .finally(() => {
           dispatch(stopFeedingPet());
+        })
+        .catch(() => {
+          dispatch(setHasFatalApiError(true));
         });
     }
   }, [
-    isFeedingErrored,
     isFeedingPets,
     isFeedingPet,
     authToken,

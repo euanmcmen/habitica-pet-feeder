@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import LoginContainer from "../../login/container/LoginContainer";
-import FeedUserPetsContainer from "../../feed/container/FeedUserPetsContainer";
 import FetchError from "../FetchError";
 
 import {
@@ -12,6 +11,7 @@ import {
 import {
   setUserNameAndRateLimitInfo,
   setAuthToken,
+  setHasFatalApiError,
 } from "../../../slices/apiConnectionSlice";
 
 import { setPetFoodFeeds } from "../../../slices/petFoodFeedSlice";
@@ -19,14 +19,12 @@ import { setPetFoodFeeds } from "../../../slices/petFoodFeedSlice";
 const FetchUserPetsContainer = () => {
   const dispatch = useDispatch();
 
-  const authToken = useSelector((state) => state.apiConnection.authToken);
-
   const [isWaiting, setIsWaiting] = useState(false);
-  const [isErrored, setIsErrored] = useState(false);
+  const [isAuthErrored, setIsAuthErrored] = useState(false);
 
   const handleLoginSubmitSuccessAsync = async (authUser) => {
     setIsWaiting(true);
-    setIsErrored(false);
+    setIsAuthErrored(false);
 
     try {
       var token = await getAuthorizationTokenAsync(authUser);
@@ -34,10 +32,13 @@ const FetchUserPetsContainer = () => {
       var userPetFoodFeedsResponse = await getUserPetFoodFeedsAsync(token);
 
       dispatchEvents(token, userPetFoodFeedsResponse);
-    } catch {
-      setIsErrored(true);
-    } finally {
-      setIsWaiting(false);
+    } catch (exception) {
+      if (exception.message === "401") {
+        setIsAuthErrored(true);
+        setIsWaiting(false);
+      } else {
+        dispatch(setHasFatalApiError(true));
+      }
     }
   };
 
@@ -56,16 +57,12 @@ const FetchUserPetsContainer = () => {
 
   return (
     <>
-      {authToken === "" ? (
-        <LoginContainer
-          onLoginSubmitSuccess={handleLoginSubmitSuccessAsync}
-          shouldDisableForm={isWaiting}
-        />
-      ) : (
-        <FeedUserPetsContainer />
-      )}
+      <LoginContainer
+        onLoginSubmitSuccess={handleLoginSubmitSuccessAsync}
+        shouldDisableForm={isWaiting}
+      />
       <br />
-      {isErrored && (
+      {isAuthErrored && (
         <>
           <FetchError />
         </>

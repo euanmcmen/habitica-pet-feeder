@@ -4,9 +4,14 @@ import { Container } from "react-bootstrap";
 import { AppNavBar } from "./components/nav/AppNavBar";
 import LogoutContainer from "./components/logout/container/LogoutContainer";
 import FetchUserPetsContainer from "./components/fetch/container/FetchUserPetsContainer";
+import FeedUserPetsContainer from "./components/feed/container/FeedUserPetsContainer";
+import FatalError from "./components/FatalError";
 
 function App() {
   const authToken = useSelector((state) => state.apiConnection.authToken);
+  const hasFatalApiError = useSelector(
+    (state) => state.apiConnection.hasFatalApiError
+  );
 
   return (
     <>
@@ -23,7 +28,16 @@ function App() {
       )}
 
       <Container>
-        <FetchUserPetsContainer />
+        {hasFatalApiError && <FatalError />}
+        {!hasFatalApiError && (
+          <>
+            {authToken === "" ? (
+              <FetchUserPetsContainer />
+            ) : (
+              <FeedUserPetsContainer />
+            )}
+          </>
+        )}
       </Container>
     </>
   );

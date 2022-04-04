@@ -8,7 +8,6 @@ export const petFoodFeedSlice = createSlice({
     isFeedingPets: false,
     isFeedingPet: false,
     isFeedingComplete: false,
-    isFeedingErrored: false,
   },
 
   reducers: {
@@ -35,15 +34,10 @@ export const petFoodFeedSlice = createSlice({
 
     stopFeedingPets: (state) => {
       state.isFeedingPets = false;
-      state.isFeedingErrored = false;
     },
 
     setFeedingComplete: (state, action) => {
       state.isFeedingComplete = action.payload;
-    },
-
-    setFeedingErrored: (state, action) => {
-      state.isFeedingErrored = action.payload;
     },
 
     clearPetFoodFeeds: (state) => {
@@ -51,7 +45,6 @@ export const petFoodFeedSlice = createSlice({
       state.feedIndex = 0;
       state.isFeedingPets = false;
       state.isFeedingPet = false;
-      state.isFeedingErrored = false;
       state.isFeedingComplete = false;
     },
   },
@@ -65,7 +58,6 @@ export const {
   stopFeedingPets,
   stopFeedingPet,
   setFeedingComplete,
-  setFeedingErrored,
   clearPetFoodFeeds,
 } = petFoodFeedSlice.actions;
 

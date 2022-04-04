@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import FeedingContainer from "./FeedingContainer";
 import FeedingComplete from "../FeedingComplete";
-import NoFeeds from "../FeedNoFeeds";
+import NoFeedsWarning from "../NoFeedsWarning";
 
 const FeedUserPetsContainer = () => {
   const petFoodFeeds = useSelector((state) => state.petFoodFeed.feeds);
@@ -13,12 +13,9 @@ const FeedUserPetsContainer = () => {
 
   return (
     <>
-      {petFoodFeeds.length === 0 && <NoFeeds />}
+      {petFoodFeeds.length === 0 && <NoFeedsWarning />}
       {petFoodFeeds.length > 0 && (
-        <>
-          {!isFeedingComplete && <FeedingContainer />}
-          {isFeedingComplete && <FeedingComplete />}
-        </>
+        <>{isFeedingComplete ? <FeedingComplete /> : <FeedingContainer />}</>
       )}
     </>
   );

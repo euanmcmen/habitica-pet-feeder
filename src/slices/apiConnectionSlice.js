@@ -6,6 +6,7 @@ export const apiConnectionSlice = createSlice({
     authToken: "",
     userName: "",
     rateLimitInfo: {},
+    hasFatalApiError: false,
   },
   reducers: {
     setAuthToken: (state, action) => {
@@ -21,10 +22,15 @@ export const apiConnectionSlice = createSlice({
       state.rateLimitInfo = action.payload;
     },
 
+    setHasFatalApiError: (state, action) => {
+      state.hasFatalApiError = action.payload;
+    },
+
     clearApiConnection: (state) => {
       state.authToken = "";
       state.userName = "";
       state.rateLimitInfo = {};
+      state.hasFatalApiError = false;
     },
   },
 });
@@ -33,6 +39,7 @@ export const {
   setAuthToken,
   setUserNameAndRateLimitInfo,
   setRateLimitInfo,
+  setHasFatalApiError,
   clearApiConnection,
 } = apiConnectionSlice.actions;
 

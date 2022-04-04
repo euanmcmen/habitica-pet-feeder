@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Alert } from "react-bootstrap";
 
-const FeedNoFeeds = () => {
+const NoFeedsWarning = () => {
   return (
     <>
       <Row>
@@ -16,4 +16,4 @@ const FeedNoFeeds = () => {
   );
 };
 
-export default FeedNoFeeds;
+export default NoFeedsWarning;

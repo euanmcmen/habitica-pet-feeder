@@ -1,10 +1,15 @@
 const throwUnsuccessfulResponseCode = (response) => {
-  if (response.status !== 200)
-    throw new Error(`Non-success status code: ${response.status}`);
+  if (response.status !== 200) {
+    throw new Error(response.status);
+  }
 };
 
+const getBaseUrl = () => "https://habitica-pet-feeder-api.azurewebsites.net";
+
+//const getBaseUrl = () => "https://localhost:44354";
+
 export const getAuthorizationTokenAsync = async (authUser) => {
-  var url = "https://habitica-pet-feeder-api.azurewebsites.net/api/Auth/token";
+  var url = `${getBaseUrl()}/api/Auth/token`;
 
   var requestOptions = {
     method: "POST",
@@ -22,8 +27,7 @@ export const getAuthorizationTokenAsync = async (authUser) => {
 };
 
 export const getUserPetFoodFeedsAsync = async (authToken) => {
-  var url =
-    "https://habitica-pet-feeder-api.azurewebsites.net/api/PetFoodFeeds/fetch";
+  var url = `${getBaseUrl()}/api/PetFoodFeeds/fetch`;
 
   var requestOptions = {
     method: "GET",
@@ -47,8 +51,7 @@ export const feedPetFoodAsync = async (
   rateLimitInfo,
   petFoodFeed
 ) => {
-  var url =
-    "https://habitica-pet-feeder-api.azurewebsites.net/api/PetFoodFeeds/feed";
+  var url = `${getBaseUrl()}/api/PetFoodFeeds/feed`;
 
   var requestOptions = {
     method: "POST",
