@@ -9,12 +9,14 @@ import {
 } from "../../../client/apiClient";
 
 import {
-  setUserNameAndRateLimitInfo,
+  setUserName,
+  setRateLimitInfo,
   setAuthToken,
   setHasFatalApiError,
 } from "../../../slices/apiConnectionSlice";
 
 import { setPetFoodFeeds } from "../../../slices/petFoodFeedSlice";
+import apiHttpResponseCodes from "../../../client/apiHttpResponseCodes";
 
 const FetchUserPetsContainer = () => {
   const dispatch = useDispatch();
@@ -28,31 +30,26 @@ const FetchUserPetsContainer = () => {
 
     try {
       var token = await getAuthorizationTokenAsync(authUser);
-
       var userPetFoodFeedsResponse = await getUserPetFoodFeedsAsync(token);
 
-      dispatchEvents(token, userPetFoodFeedsResponse);
-    } catch (exception) {
-      if (exception.message === "401") {
-        setIsAuthErrored(true);
-        setIsWaiting(false);
-      } else {
-        dispatch(setHasFatalApiError(true));
+      switch (userPetFoodFeedsResponse.httpStatus) {
+        case apiHttpResponseCodes.Ok:
+          dispatch(setAuthToken(token));
+          dispatch(setPetFoodFeeds(userPetFoodFeedsResponse.body.petFoodFeeds));
+          dispatch(setRateLimitInfo(userPetFoodFeedsResponse.rateLimitInfo));
+          dispatch(setUserName(userPetFoodFeedsResponse.body.userName));
+          break;
+        case apiHttpResponseCodes.NotAuthorized:
+          setIsAuthErrored(true);
+          setIsWaiting(false);
+          break;
+        default:
+          dispatch(setHasFatalApiError());
+          break;
       }
+    } catch (exception) {
+      dispatch(setHasFatalApiError());
     }
-  };
-
-  const dispatchEvents = (token, userPetFoodFeedsResponse) => {
-    dispatch(setAuthToken(token));
-
-    dispatch(setPetFoodFeeds(userPetFoodFeedsResponse.body.petFoodFeeds));
-
-    dispatch(
-      setUserNameAndRateLimitInfo({
-        userName: userPetFoodFeedsResponse.body.userName,
-        rateLimitInfo: userPetFoodFeedsResponse.rateLimitInfo,
-      })
-    );
   };
 
   return (

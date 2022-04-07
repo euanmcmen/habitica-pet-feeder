@@ -6,14 +6,20 @@ import { getFriendlyName } from "../../../logic/petFoodFeedFunctions";
 const FeedLog = (props) => {
   const petFoodFeeds = useSelector((state) => state.petFoodFeed.feeds);
 
-  const displayInFriendlyWay = (petFoodFeed, isPastTense) => {
+  const displayInFriendlyWay = (petFoodFeed) => {
     var petFriendlyName = getFriendlyName(petFoodFeed.petFullName);
     var foodFriendlyName = getFriendlyName(petFoodFeed.foodFullName);
     var fedQuantity = petFoodFeed.feedQuantity;
-    var tenseWord = isPastTense ? "was" : "will be";
-    var fedMessage = petFoodFeed.willSatisfyPet ? "satisfied after" : "fed";
 
-    return `${petFriendlyName} ${tenseWord} ${fedMessage} ${fedQuantity} portions of ${foodFriendlyName}.`;
+    var tensePart = petFoodFeed.isFed ? "was" : "will be";
+    var fedPart = petFoodFeed.willSatisfyPet ? "satisfied after" : "fed";
+    var errorMessage = "could not be fed";
+
+    var actionMessage = petFoodFeed.hasError
+      ? `${errorMessage}`
+      : `${tensePart} ${fedPart}`;
+
+    return `${petFriendlyName} ${actionMessage} ${fedQuantity} portions of ${foodFriendlyName}.`;
   };
 
   return (
@@ -29,7 +35,7 @@ const FeedLog = (props) => {
                   <ListGroup.Item
                     key={petFoodFeed.petFullName + petFoodFeed.foodFullName}
                   >
-                    <span>{displayInFriendlyWay(petFoodFeed, false)}</span>
+                    <span>{displayInFriendlyWay(petFoodFeed)}</span>
                   </ListGroup.Item>
                 ))}
             </ListGroup>
@@ -45,7 +51,7 @@ const FeedLog = (props) => {
                   <ListGroup.Item
                     key={petFoodFeed.petFullName + petFoodFeed.foodFullName}
                   >
-                    <span>{displayInFriendlyWay(petFoodFeed, true)}</span>
+                    <span>{displayInFriendlyWay(petFoodFeed)}</span>
                   </ListGroup.Item>
                 ))}
             </ListGroup>

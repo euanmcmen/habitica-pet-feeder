@@ -10,13 +10,15 @@ import { feedPetFoodAsync } from "../../../client/apiClient";
 import { setRateLimitInfo } from "../../../slices/apiConnectionSlice";
 
 import {
-  setPetFedAtIndex,
+  setPetFeedCompleteAtIndex,
+  setPetFeedErrorAtIndex,
   setFeedingComplete,
   stopFeedingPet,
   startFeedingPet,
 } from "../../../slices/petFoodFeedSlice";
 
 import { setHasFatalApiError } from "../../../slices/apiConnectionSlice";
+import apiHttpResponseCodes from "../../../client/apiHttpResponseCodes";
 
 const FeedingContainer = () => {
   const dispatch = useDispatch();
@@ -48,12 +50,25 @@ const FeedingContainer = () => {
 
       feedPetFoodAsync(authToken, rateLimitInfo, petFoodFeeds[petFoodFeedIndex])
         .then((res) => {
+          switch (res.httpStatus) {
+            case apiHttpResponseCodes.Ok:
+              dispatch(setPetFeedCompleteAtIndex(petFoodFeedIndex));
+              break;
+            case apiHttpResponseCodes.NotAuthorized:
+            case apiHttpResponseCodes.Forbidden:
+              dispatch(setPetFeedErrorAtIndex(petFoodFeedIndex));
+              break;
+            default:
+              dispatch(setHasFatalApiError());
+              return;
+          }
+
           dispatch(setRateLimitInfo(res.rateLimitInfo));
-          dispatch(setPetFedAtIndex(petFoodFeedIndex));
+
           dispatch(stopFeedingPet());
         })
         .catch(() => {
-          dispatch(setHasFatalApiError(true));
+          dispatch(setHasFatalApiError());
         });
     }
   }, [
@@ -71,7 +86,7 @@ const FeedingContainer = () => {
   //
   useEffect(() => {
     if (petFoodFeedIndex === petFoodFeeds.length && !isFeedingComplete) {
-      dispatch(setFeedingComplete(true));
+      dispatch(setFeedingComplete());
     }
   }, [petFoodFeedIndex, petFoodFeeds.length, isFeedingComplete, dispatch]);
 
