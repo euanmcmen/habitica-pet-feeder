@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Alert } from "react-bootstrap";
 
-const FetchError = () => {
+const FetchErrorMessage = () => {
   return (
     <Row>
       <Alert variant="danger">
@@ -12,4 +12,4 @@ const FetchError = () => {
   );
 };
 
-export default FetchError;
+export default FetchErrorMessage;

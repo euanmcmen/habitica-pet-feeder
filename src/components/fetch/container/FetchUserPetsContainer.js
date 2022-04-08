@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import LoginContainer from "../../login/container/LoginContainer";
-import FetchError from "../FetchError";
+import FetchErrorMessage from "../FetchErrorMessage";
 
 import {
   getAuthorizationTokenAsync,
@@ -61,7 +61,7 @@ const FetchUserPetsContainer = () => {
       <br />
       {isAuthErrored && (
         <>
-          <FetchError />
+          <FetchErrorMessage />
         </>
       )}
     </>
