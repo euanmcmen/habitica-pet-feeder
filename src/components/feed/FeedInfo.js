@@ -15,7 +15,7 @@ const FeedInfo = () => {
           You can view some extra information using the buttons to the right of
           the summary.
         </p>
-        <p>Press the Start Feeding button below to begin.</p>
+        <p>Press the "Start Feeding" button below to begin.</p>
       </Card.Body>
     </Card>
   );

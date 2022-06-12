@@ -18,12 +18,11 @@ const LoginInfo = () => {
           >
             Settings
           </a>{" "}
-          page. Your API Key is not stored, and is only used for this stage of
-          the application.
+          page. Your API Key is not stored.
         </p>
         <p>
-          Enter your User ID and API Key below, and press the button below to
-          start feeding your pets!
+          Enter your User ID and API Key below, and press the "Log In" button to
+          continue.
         </p>
       </Card.Body>
     </Card>
