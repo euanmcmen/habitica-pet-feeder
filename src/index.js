@@ -6,6 +6,8 @@ import "./index.css";
 import store from "./store/store";
 import { Provider } from "react-redux";
 
+document.title = "Agreeable Flower";
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
@@ -14,5 +16,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
-
-/* <Provider store={store}> <App /> </Provider> */
